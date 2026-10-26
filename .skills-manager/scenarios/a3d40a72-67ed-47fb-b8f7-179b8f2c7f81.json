@@ -1,8 +1,0 @@
-{
-  "schema_version": 1,
-  "scenario_id": "a3d40a72-67ed-47fb-b8f7-179b8f2c7f81",
-  "name": "Local",
-  "description": "本机的 skills",
-  "icon": "database",
-  "sort_order": 999
-}
