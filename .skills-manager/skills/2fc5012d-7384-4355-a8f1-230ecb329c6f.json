@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "2fc5012d-7384-4355-a8f1-230ecb329c6f",
+  "path": "rename-chat",
+  "path_key": "rename-chat",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

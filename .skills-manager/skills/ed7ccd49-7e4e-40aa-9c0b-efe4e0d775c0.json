@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "ed7ccd49-7e4e-40aa-9c0b-efe4e0d775c0",
+  "path": "setup-ts-deep-modules",
+  "path_key": "setup-ts-deep-modules",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
