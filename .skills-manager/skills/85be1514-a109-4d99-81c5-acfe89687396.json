@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "85be1514-a109-4d99-81c5-acfe89687396",
+  "path": "find-skills",
+  "path_key": "find-skills",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

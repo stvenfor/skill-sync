@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "e2d77b5a-4572-4bfc-ad2a-a4a33c976d81",
+  "path": "spec-orchestrator",
+  "path_key": "spec-orchestrator",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

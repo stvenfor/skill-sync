@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "b5a5969c-2ecb-4f68-a080-5f3a57dc9321",
+  "path": "update-cli-config",
+  "path_key": "update-cli-config",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

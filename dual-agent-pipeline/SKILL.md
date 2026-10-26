@@ -102,7 +102,7 @@ Reviewer **只读**：不得改工作区、不得 commit。
 
 ## Orchestrator 纪律
 
-- 子代理 **不** 继承本会话聊天历史与 Cursor user rules；**每派一处**须在 prompt 中：① 模板里的 `subagent-user-rules.md` Read 指令；② 当轮相关的 user rules / 技能步骤（原文粘贴，勿概括成「遵守用户规则」四字）。
+- 子代理 **不** 继承本会话聊天历史与 Codex user rules；**每派一处**须在 prompt 中：① 模板里的 `subagent-user-rules.md` Read 指令；② 当轮相关的 user rules / 技能步骤（原文粘贴，勿概括成「遵守用户规则」四字）。
 - 代码探索类任务：派发块写明实现者 **首步** `codegraph_explore`，VERIFY 含 `CODEGRAPH:`。
 - 不在审查 prompt 里要求「不要报某类问题」——有争议在 Gate 由你裁决。
 - 仓库 `AGENTS.md` 不因本 Skill 修改；个人流水线仅引用仓库规范。

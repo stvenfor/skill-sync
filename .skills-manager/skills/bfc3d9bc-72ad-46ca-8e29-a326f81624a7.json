@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "bfc3d9bc-72ad-46ca-8e29-a326f81624a7",
+  "path": "wayfinder",
+  "path_key": "wayfinder",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "82022091-3567-4c31-8f4e-0c474fcde659",
+  "path": "dual-agent-pipeline",
+  "path_key": "dual-agent-pipeline",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

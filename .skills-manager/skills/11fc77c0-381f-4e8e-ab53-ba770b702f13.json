@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "11fc77c0-381f-4e8e-ab53-ba770b702f13",
+  "path": "create-subagent",
+  "path_key": "create-subagent",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "import",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
