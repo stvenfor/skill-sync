@@ -87,7 +87,7 @@ shots-manifest.yaml
 
 ### 3.6 门禁分级
 
-- **P0**：各页 default + 主路径关键态（含主弹层）
+- **P0**：各页 default + 主路径关键态（含主弹层）；**不含 H5/WebView**（见 §3.9）
 - **P1**：list-top/end、empty、error
 - **P2**：stitch、region 特写、进行中帧（stitch/随机动效不进像素 diff）
 
@@ -101,14 +101,22 @@ shots-manifest.yaml
 
 ---
 
-### 3.9 已有截图优先（禁止无故重截）
+### 3.9 H5 / WebView 页（忽略，禁止截图）
+
+- **判定**：页面主体为 H5 / WebView / 内嵌浏览器 / 打开外链网页（含半屏 Web 容器盖住原生主内容）→ **本轨忽略，禁止截图**。
+- **动作**：不写入 shots-manifest 的 P0/P1；不调用 `capture.sh` / `interact.sh` 对该态落盘；index 可记一行 `SKIP_H5: <入口说明>`，**不**产出 PNG 当真值。
+- **同步**：H5 页**不进**对照点表 CODE、不对拍、不要求鸿蒙原生重做（除非用户当轮书面改口「H5 也要原生」）。
+- **边界**：原生壳 + 局部 Web 若壳层是验收对象，只截**原生壳**态；Web 内容区仍标 H5 忽略。无法区分时停问，默认按 H5 忽略。
+
+### 3.10 已有截图优先（禁止无故重截）
+
 
 1. 跑截图前先查 `~/Desktop/android-shots/<module>/`（及 index）：目标 `file` **已存在且非空** → **默认复用**，记 `SKIP_EXISTING`，不调 adb/hdc 重截。
 2. 仅在以下情况重截：`FORCE_RECAPTURE=1` / `--force`；或 index 标注「源 UI 变更须刷新」；或文件损坏/0 字节。
 3. `scripts/capture.sh` 已实现上述 SKIP；Runner / Instrumentation 路径须同等实现（manifest 可写 `reuse: prefer_existing`，默认 true）。
 4. 复用时仍须核对：文件名与 `page+state` 对应、分辨率 profile 与本轮 DEVICE 一致；profile 变了才允许重截并更新 index。
 
-### 3.10 点击 / 拖动等交互（评估结论：支持）
+### 3.11 点击 / 拖动等交互（评估结论：支持）
 
 | 能力 | 支持度 | 做法 |
 |---|---|---|
@@ -125,7 +133,7 @@ shots-manifest.yaml
 - 每关键态仍 **一态一图**；交互是到达该态的路径，不是用录像替代截图。
 - adb `input` 为过渡通路；稳定后迁 Instrumentation（与 §3.1 一致）。
 
-### 3.11 鸿蒙真机还原验证与 ≤1% 差异门
+### 3.12 鸿蒙真机还原验证与 ≤1% 差异门
 
 Android 截图齐套（或复用完成）后，**必须**在鸿蒙真机按同一入口/态还原并截图对拍：
 
@@ -141,14 +149,14 @@ Android 真值 PNG
 |---|---|
 | 差异像素占比 **≤ 1%** | DEVICE 该态 PASS（仍须对照点表语义回勾） |
 | 差异 **> 1%** | **同步优化**：对照点表回勾差异 → 只改表内鸿蒙文件 → 重编装 → 再 `verify_harmony`；禁止改 Android 真值凑绿 |
-| 缺 Android 真值 | 先 §3.9 复用或补截，禁止只截鸿蒙空比 |
+| 缺 Android 真值 | 先 §3.10 复用或补截，禁止只截鸿蒙空比 |
 
 排除（不进 1% 像素门，须在 index/note 标明）：状态栏/刘海、系统字体缩放、stitch 附录、随机波形/未钉死 Lottie 帧。P0 主路径与关键弹层**不得**借排除项逃门。
 
 落盘：`$OUT/<page>.harmony.png` + `<page>.compare.json`（不做 git 管理）。
 
 
-### 3.12 截图后无损压缩（自动）
+### 3.13 截图后无损压缩（自动）
 
 - `capture.sh` / `harmony_shot.sh` 写出 PNG 后**自动**调用 `scripts/compress_png.sh`。
 - **只做无损**：不改像素；优先 `oxipng` → `optipng` → `pngcrush` → Pillow `optimize+compress_level=9`。

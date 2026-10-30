@@ -65,7 +65,7 @@ Worktree：../Dubbing-wt-<slice> ← TASK-xxx 白名单互斥。
 
 | 帽子 | 当次只做什么 | 共同约束 |
 |---|---|---|
-| **SHOT** | 跑 capture / interact / 补缺态；写出后走无损压缩；更新该模块 index | 产物**只**进 `~/Desktop/android-shots/<module>/`；已有非空 PNG 默认复用 |
+| **SHOT** | 跑 capture / interact / 补缺态；写出后走无损压缩；更新该模块 index | 产物**只**进 `~/Desktop/android-shots/<module>/`；已有非空 PNG 默认复用；**H5/WebView 禁止截** |
 | **SURVEY** | 只读逻辑/资源/交互表 | 不改鸿蒙业务码；不挪截图目录 |
 | **CODE** | 白名单内改鸿蒙；Codegraph + Ponytail；字重跟 Android | 认自己的 worktree；不重截除非 FORCE 或 TASK 写明 |
 | **MERGE** | 合切片分支 | 一人 |

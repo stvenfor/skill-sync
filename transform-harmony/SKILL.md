@@ -89,6 +89,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 | 门 | 要求 |
 |---|---|
 | 截图落盘 | `~/Desktop/android-shots/<module>/`；**已有优先复用**；写出后**自动无损压缩**；**不做 git 管理** |
+| H5 | WebView/H5/内嵌网页 **忽略、禁止截图**；不进 P0 真值与对拍（§C.3.9） |
 | 交互抓取 | manifest `actions[]` + `interact.sh`（click/swipe/longpress）；能深链直达优先深链 |
 | 鸿蒙对拍 | `verify_harmony.sh`；像素差默认 **≤1%**；超则同步优化（只改表内鸿蒙文件）；**仅 merge 后** |
 | 并行 | 勘察可并行；CODE 白名单无交集；一切片一 worktree；禁同分支抢写 |
