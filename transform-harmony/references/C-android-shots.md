@@ -11,8 +11,11 @@
 | `scripts/run_shots.sh` | 模块目录引导 / 单页封装 |
 | `scripts/ios_index.sh` | iOS 关键词只读索引 |
 | `scripts/harmony_shot.sh` | 鸿蒙 hdc 截图并排 |
+| `scripts/interact.sh` | 点击 / 滑动 / 长按（adb input） |
+| `scripts/compare_shots.py` | Android vs 鸿蒙像素差（默认阈值 1%） |
+| `scripts/verify_harmony.sh` | 鸿蒙同态截图 + 对比；超阈值提示同步优化 |
 
-模板：`templates/shots-manifest.example.yaml`。产物**不进 git**。
+模板：`templates/shots-manifest.example.yaml`。产物**不进 git**。已有 PNG **默认复用**。
 
 ---
 
@@ -96,3 +99,49 @@ shots-manifest.yaml
 视觉真值以 **Mac 桌面** `~/Desktop/android-shots/<module>/` 的稳定 run 为准（见 §3.1.2），**不进 git**。CLARIFY 映射表与 DEVICE 期望**必须写具体文件名**（可写桌面相对路径），禁止「列表正常」。对照点表「源文件和控件」列应能指回截图号或源类名。若流水线需要本地 `sync/<module>/android-shots/` 镜像，仅作只读拷贝且同样 ignore，不以仓内副本为唯一真值。
 
 ---
+
+### 3.9 已有截图优先（禁止无故重截）
+
+1. 跑截图前先查 `~/Desktop/android-shots/<module>/`（及 index）：目标 `file` **已存在且非空** → **默认复用**，记 `SKIP_EXISTING`，不调 adb/hdc 重截。
+2. 仅在以下情况重截：`FORCE_RECAPTURE=1` / `--force`；或 index 标注「源 UI 变更须刷新」；或文件损坏/0 字节。
+3. `scripts/capture.sh` 已实现上述 SKIP；Runner / Instrumentation 路径须同等实现（manifest 可写 `reuse: prefer_existing`，默认 true）。
+4. 复用时仍须核对：文件名与 `page+state` 对应、分辨率 profile 与本轮 DEVICE 一致；profile 变了才允许重截并更新 index。
+
+### 3.10 点击 / 拖动等交互（评估结论：支持）
+
+| 能力 | 支持度 | 做法 |
+|---|---|---|
+| 单击 / 双击近似 | **支持** | manifest `actions[]: click`；或 `scripts/interact.sh tap` / `tap_pct` |
+| 滑动 / 拖动 | **支持** | `swipe` / `swipe_pct`；清单优先 `scroll_to_*` / `scroll_until` |
+| 长按 | **支持** | `longpress`（input swipe 同点延时） |
+| 多指 / 复杂系统手势 | **有限** | 不保证；能深链直达态则勿用手势凑 |
+| 依赖动画中间帧 | **谨慎** | 截「拖前/拖后」两态；残影一般不进 P0 |
+
+硬规则：
+
+- 交互写进 **shots-manifest `actions[]`**（可重复、可过滤），禁止口头「先随便点一下」。
+- 坐标优先 **resource-id / testTag 定位后点中心**；百分比坐标仅兜底并写进 note。
+- 每关键态仍 **一态一图**；交互是到达该态的路径，不是用录像替代截图。
+- adb `input` 为过渡通路；稳定后迁 Instrumentation（与 §3.1 一致）。
+
+### 3.11 鸿蒙真机还原验证与 ≤1% 差异门
+
+Android 截图齐套（或复用完成）后，**必须**在鸿蒙真机按同一入口/态还原并截图对拍：
+
+```text
+Android 真值 PNG
+    → 鸿蒙打开同态（深链 / 同操作路径）
+    → scripts/harmony_shot.sh
+    → scripts/compare_shots.py（默认 threshold=0.01）
+    → scripts/verify_harmony.sh <page> <module>
+```
+
+| 结果 | 动作 |
+|---|---|
+| 差异像素占比 **≤ 1%** | DEVICE 该态 PASS（仍须对照点表语义回勾） |
+| 差异 **> 1%** | **同步优化**：对照点表回勾差异 → 只改表内鸿蒙文件 → 重编装 → 再 `verify_harmony`；禁止改 Android 真值凑绿 |
+| 缺 Android 真值 | 先 §3.9 复用或补截，禁止只截鸿蒙空比 |
+
+排除（不进 1% 像素门，须在 index/note 标明）：状态栏/刘海、系统字体缩放、stitch 附录、随机波形/未钉死 Lottie 帧。P0 主路径与关键弹层**不得**借排除项逃门。
+
+落盘：`$OUT/<page>.harmony.png` + `<page>.compare.json`（不做 git 管理）。

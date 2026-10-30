@@ -67,12 +67,12 @@ sync/<module>/
 |---|---|---|
 | S0 范围 | `CLARIFY_<MODULE>_SCOPE.md` | 非目标、完成定义、硬门写死 |
 | S1 结构 | `CLARIFY_<MODULE>_STRUCTURE.md` | 映射表 + 双树 + 偏差 + **分支表** |
-| S2 截图 | `android-shots/` + index | P0 态齐；清单可 `--module/--page/--state` 过滤 |
+| S2 截图 | `android-shots/` + index | P0 态齐；**已有图优先复用**；清单可过滤；交互见 actions[] |
 | S2b 对照点 | `mapping-table.md`（§B） | 五列齐；无系统替代/待定；资源缺失已裁定 |
 | S3 WBS/PROMPT | 可独立派的切片提示词 | 视觉轨含 Must-fix 三段；白名单 ⊆ 对照表 |
 | S4 STAGE_A | Must-fix、TC、资源核对 | 缺分支表/资源/对照表 → 不派 B |
 | S5 CODE | 仅表内写明文件；遵 **A.+B.** | 本机仓优先；半程可报「改码齐、在编包」 |
-| S6 DEVICE | 对照截图 + **同表回勾** | 静态 PASS ≠ 视觉结案；真机前不喊整单完成 |
+| S6 DEVICE | 鸿蒙真机还原 + **≤1% 对拍** + 同表回勾 | 超 1% → 同步优化再验；静态 PASS ≠ 结案 |
 | S7 回灌 | 坑点对齐相关角色 | 禁止只对功能不对坑点 |
 
 **切片顺序（降低翻车）**：地图（无码）→ 对照点表确认 → 壳+空失败 → 主路径 → 分支 → 视觉收敛 triage → 回写/上下游。整模块禁止一次糊成一单。

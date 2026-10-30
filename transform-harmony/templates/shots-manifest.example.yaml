@@ -1,7 +1,9 @@
-# 复制为工程 tools 或本机清单；产物仍落 ~/Desktop/android-shots/<module>/（不进 git）
+# 产物落 ~/Desktop/android-shots/<module>/（不进 git）
+# reuse.preferExisting 默认 true：目标 file 已存在则跳过重截
 version: 1
 appId: com.example.app
-# 可选：钉死设备；也可用环境变量 ANDROID_SERIAL
+reuse:
+  preferExisting: true
 # deviceSerial: emulator-5554
 defaultDevice: phone_portrait
 login:
@@ -20,6 +22,13 @@ modules:
             waitFor: { testTag: "lc_home_root" }
             file: A-home-default-01.png
             note: "首页默认态"
+          - state: after_scroll
+            actions:
+              - { type: swipe_pct, x1: 50, y1: 70, x2: 50, y2: 30, ms: 300 }
+              - { type: click, testTag: "item_0" }   # 优先语义定位；无则改用 tap_pct
+            waitFor: { testTag: "detail_root" }
+            file: A-home-after-scroll-01.png
+            note: "滑动后点首条"
           - state: empty
             setup: ["clear_cache_fixture"]
             waitFor: { text: "暂无内容" }

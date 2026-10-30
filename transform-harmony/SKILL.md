@@ -1,8 +1,9 @@
 ---
 name: transform-harmony
-description: 在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac 桌面、对照源码转码、对照点表与执行总则；规则与脚本分层在 references/ scripts/ templates/。
+description: >-
+  在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac 桌面、对照源码转码、对照点表与执行总则；规则与脚本分层在
+  references/ scripts/ templates/。
 ---
-
 # transform-harmony
 
 把**一整模块**同步到鸿蒙时按本 skill 执行。真值三轨写死；**规范按层存放，按需 Read，禁止一次灌入全文**。
@@ -31,7 +32,8 @@ references/              # 规范规则（按层 Read）
   D-logic-source.md      # 逻辑源勘察
   E-harmony-norms.md     # 鸿蒙落点 / ArkTS / Must-fix / DEVICE
 scripts/                 # 可执行脚本（产物不进 git）
-  capture.sh measure.py run_shots.sh ios_index.sh harmony_shot.sh
+  capture.sh interact.sh measure.py run_shots.sh ios_index.sh
+  harmony_shot.sh compare_shots.py verify_harmony.sh
 templates/               # 清单 / 对照表 / 交卷 / ACTIVE 示例
 ```
 
@@ -46,17 +48,19 @@ templates/               # 清单 / 对照表 / 交卷 / ACTIVE 示例
 ## 编排顺序（必须按序）
 
 1. Read `references/00-overview.md` → 齐套与 S0–S7；缺资产停。
-2. 截图轨：Read `references/C-android-shots.md`；用 `scripts/capture.sh` / `run_shots.sh`（真机或模拟器已装应用）；清单见 `templates/shots-manifest.example.yaml`。
+2. 截图轨：Read `references/C-android-shots.md`；**已有图优先复用**；缺图再用 `capture.sh` / `run_shots.sh`；需点击滑动用 `interact.sh` 或 manifest `actions[]`。
 3. 逻辑轨：Read `references/D-logic-source.md`；需要时 `scripts/ios_index.sh <关键词>`。
 4. 对照点：Read `references/B-mapping-table.md`；只读源码填 `templates/mapping-table.md`；有「系统替代/待定/缺失」→ **停问**，勿写码。
 5. CODE 前：Read `references/A-execution.md` + `references/E-harmony-norms.md`；ACTIVE 联动；Codegraph + Ponytail；只改表内文件。
-6. 交卷：`templates/RESULT-handoff.md` + 同表回勾；鸿蒙并排可用 `scripts/harmony_shot.sh`。
+6. DEVICE：`scripts/verify_harmony.sh` 鸿蒙真机同态对拍（默认 ≤1%）；超差 → 同步优化再验；交卷 `templates/RESULT-handoff.md` + 同表回勾。
 
 ## 硬门速记
 
 | 门 | 要求 |
 |---|---|
-| 截图落盘 | `~/Desktop/android-shots/<module>/`（`ANDROID_SHOTS_ROOT` 可覆盖）；**不做 git 管理** |
+| 截图落盘 | `~/Desktop/android-shots/<module>/`；**已有优先复用**（`FORCE_RECAPTURE=1` 才重截）；**不做 git 管理** |
+| 交互抓取 | manifest `actions[]` + `interact.sh`（click/swipe/longpress）；能深链直达优先深链 |
+| 鸿蒙对拍 | `verify_harmony.sh`；像素差默认 **≤1%**；超则同步优化（只改表内鸿蒙文件） |
 | 设备 | 真机 **或** 模拟器，均须**已安装**目标应用；多设备 `ANDROID_SERIAL` |
 | 对照表 | 五列齐；禁「类似弹框」；资源缺失写「缺失，停止」 |
 | Lottie | 创建时机 / json / 播完切换 / 循环；禁 Canvas scale；禁 setTimeout 当结束 |
