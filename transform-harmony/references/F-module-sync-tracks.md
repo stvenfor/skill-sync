@@ -1,6 +1,8 @@
 # F. 指定模块转换总轨（截图 → 逻辑 / UI / 资源 / 交互）
 
 > 用户点名「把某某模块转到鸿蒙」时，**本层是执行清单**。五轨都要做完才算模块转换完成；禁止只截图或只改 UI。
+>
+> 视觉真值平台可选：`SHOT_PLATFORM=android|ios`（见 §C.3.0）；默认 android。
 
 ## F.0 入口（一次收齐）
 
@@ -8,8 +10,9 @@
 
 | 字段 | 必填 |
 |---|---|
-| 模块名 `<module>` | 英文短名，与 `android-shots/<module>/` 一致 |
-| Android 工程/包/入口页 | 可截图的真机或已装应用模拟器 |
+| 模块名 `<module>` | 英文短名，与选定平台桌面 `<根>/<module>/` 一致 |
+| 视觉真值端 `SHOT_PLATFORM` | `android` 或 `ios`（默认 android）；与桌面根一一对应 |
+| 截图端工程/包/入口页 | 选定平台真机或已装应用模拟器 |
 | 逻辑源（iOS/Pod 或约定端）路径 | 行为真值 |
 | 鸿蒙 feature / 路由落点 | 只跟仓内架构 |
 | 本轮切片 | 整模块分片：壳→主路径→分支→动效；禁止一单糊完 |
@@ -21,9 +24,9 @@
 
 | 轨 | 真值 | 必做 | 完成标准 |
 |---|---|---|---|
-| **1 截图** | Android 可见态 | Read §C；已有图复用；缺则 capture / actions 到达态 | P0 `page×state` 齐；index 可检索；产物在桌面 |
+| **1 截图** | 选定平台可见态（android|ios） | Read §C；已有图复用；缺则 capture 或 ios_capture / actions 到达态 | P0 `page×state` 齐；index 可检索；产物在**选定**桌面根 |
 | **2 业务逻辑** | 逻辑源源码 | Read §D；分支表：入口→状态→成功/失败/空/回写 | 鸿蒙 API/VM/回写对齐分支表；可复现用例过 |
-| **3 UI 效果** | Android 截图 + 对照点表 | Read §B/§E；按区块改表内文件 | DEVICE `verify_harmony` **≤1%**；同表回勾一致 |
+| **3 UI 效果** | 选定平台截图 + 对照点表 | Read §B/§E；按区块改表内文件 | DEVICE `verify_harmony` **≤1%**；同表回勾一致 |
 | **4 资源** | 源端/设计导出文件 | 填 `templates/resource-inventory.md`；先入鸿蒙仓再引用 | 表内资源无「缺失，停止」未裁定；禁系统图标顶替 |
 | **5 交互效果** | 源端手势/动效/反馈 | 填 `templates/interaction-matrix.md`；Lottie 遵 §B.4 | 点击/滑动/反馈/动效时机与源一致；禁 setTimeout 当结束 |
 

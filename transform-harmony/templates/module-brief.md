@@ -8,7 +8,9 @@
 | 鸿蒙 feature / 路由 | |
 | 本轮切片 | 壳 / 主路径 / 分支 / 动效（圈选） |
 | fixture 账号与内容 ID | |
-| 设备 | 真机 serial / 模拟器（已装应用） |
+| 真机端 / SHOT_PLATFORM | `android` 或 `ios`（默认 android） |
+| 截图根 | android-shots 或 ios-shots（与真机端一致） |
+| 设备 | Android serial / iOS udid / 模拟器（已装应用） |
 
 五轨勾选（完成才算模块转换完）：
 

@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# 抓鸿蒙侧同一页面，与 Android 截图并排判收。
+# 抓鸿蒙侧同一页面，与选定视觉真值端截图并排判收。
 # 用法: harmony_shot.sh <页面名> [模块名]
-# 落盘: 同模块桌面目录，文件名 <page>.harmony.png（不做 git 管理）
+# 落盘: 与 SHOT_PLATFORM 对应的模块桌面目录，文件名 <page>.harmony.png（不做 git 管理）
+# SHOT_PLATFORM=android|ios（默认 android）
 set -euo pipefail
 
 PAGE="${1:?用法: harmony_shot.sh <页面名> [模块名]}"
 MODULE="${2:-$PAGE}"
-SHOTS_ROOT="${ANDROID_SHOTS_ROOT:-$HOME/Desktop/android-shots}"
+PLATFORM="${SHOT_PLATFORM:-android}"
+case "$PLATFORM" in
+  ios) SHOTS_ROOT="${IOS_SHOTS_ROOT:-$HOME/Desktop/ios-shots}" ;;
+  android|*) SHOTS_ROOT="${ANDROID_SHOTS_ROOT:-$HOME/Desktop/android-shots}" ;;
+esac
 OUT="$SHOTS_ROOT/$MODULE"
 mkdir -p "$OUT"
 

@@ -65,7 +65,7 @@ Worktree：../Dubbing-wt-<slice> ← TASK-xxx 白名单互斥。
 
 | 帽子 | 当次只做什么 | 共同约束 |
 |---|---|---|
-| **SHOT** | 跑 capture / interact / 补缺态；写出后走无损压缩；更新该模块 index | 产物**只**进 `~/Desktop/android-shots/<module>/`；已有非空 PNG 默认复用；**H5/WebView 禁止截** |
+| **SHOT** | 按 `真机端`/`SHOT_PLATFORM` 跑 capture **或** ios_capture / 补缺态；写出后走无损压缩；更新该模块 index | 产物**只**进选定根：android → `~/Desktop/android-shots/<module>/`，ios → `~/Desktop/ios-shots/<module>/`；一轮不混两端；已有非空 PNG 默认复用；**H5/WebView 禁止截** |
 | **SURVEY** | 只读逻辑/资源/交互表 | 不改鸿蒙业务码；不挪截图目录 |
 | **CODE** | 白名单内改鸿蒙；Codegraph + Ponytail；字重跟 Android | 认自己的 worktree；不重截除非 FORCE 或 TASK 写明 |
 | **MERGE** | 合切片分支 | 一人 |
@@ -75,9 +75,11 @@ Worktree：../Dubbing-wt-<slice> ← TASK-xxx 白名单互斥。
 
 ```text
 模块: <module>
-截图根: ~/Desktop/android-shots/<module>/   # 全员只认这一处，禁止拷进仓
+真机端: android | ios          # 必须写死；未写=android
+SHOT_PLATFORM: android | ios   # 与真机端一致
+截图根: ~/Desktop/android-shots/<module>/   # 或 ios-shots；全员只认这一处，禁止拷进仓、禁止混另一端
 本轮认领:
-  - @窗1 帽子=SHOT  范围=缺态 P0-3；设备=<serial>
+  - @窗1 帽子=SHOT  范围=缺态 P0-3；设备=<ANDROID_SERIAL 或 IOS_UDID>
   - @窗2 帽子=CODE  切片=ui-header  worktree=../Dubbing-wt-ui-header  TASK=…
   - @窗3 帽子=CODE  切片=logic-api  worktree=../Dubbing-wt-logic  TASK=…
 下一轮可换帽；未点名的帽子本轮不做。
@@ -85,9 +87,9 @@ Worktree：../Dubbing-wt-<slice> ← TASK-xxx 白名单互斥。
 
 桌面截图统一管理：
 
-1. **唯一权威根**：`~/Desktop/android-shots/<module>/`（全 agent 读同一路径；禁每人私建副本目录）。
+1. **本轮唯一权威根**：按 `SHOT_PLATFORM` 二选一（`android-shots` **或** `ios-shots`）；全 agent 读同一路径；禁私建副本、禁混用两端 PNG。
 2. SHOT 写、CODE/DEVICE **只读引用**文件名；CODE 不把 PNG add 进 git。
-3. 两 agent 都要动真机时：**串行约设备**（SHOT 时段 / DEVICE 时段），或分 `ANDROID_SERIAL`。
+3. 两 agent 都要动截图真机时：**串行约设备**（SHOT 时段 / DEVICE 时段），或分 `ANDROID_SERIAL` / `IOS_UDID`。
 4. 换人接着截：先看 index 与已有 PNG，缺啥补啥，禁止无故整目录重截。
 
 灵活示例：上午窗 A=SHOT、窗 B=CODE；下午窗 A 改戴 CODE（另一切片）、窗 B 戴 DEVICE——合法，只要当次 note 写清帽子与白名单。

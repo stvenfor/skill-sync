@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # 抓当前 Android 前台页：截图 + 控件树 + dp 测量表。
+# 【仅 Android】iOS 请用 ios_capture.sh；派单用 SHOT_PLATFORM=android|ios 选定真值端。
 # 真机或模拟器均可（目标须已安装应用，且 adb 在线）。
 # 用法: capture.sh <页面名> [模块名]
 # 落盘: $ANDROID_SHOTS_ROOT/<module>/  默认 ~/Desktop/android-shots/<module>/
+# 已有非空 PNG 默认 SKIP_EXISTING；FORCE_RECAPTURE=1 强制重截。
 # 产物不做 git 管理；PNG 截后自动无损压缩。
 set -euo pipefail
 
@@ -11,6 +13,12 @@ MODULE="${2:-$PAGE}"
 SHOTS_ROOT="${ANDROID_SHOTS_ROOT:-$HOME/Desktop/android-shots}"
 OUT="$SHOTS_ROOT/$MODULE"
 mkdir -p "$OUT"
+
+# 已有非空 PNG 默认复用
+if [ -f "$OUT/$PAGE.png" ] && [ -s "$OUT/$PAGE.png" ] && [ "${FORCE_RECAPTURE:-0}" != "1" ]; then
+  echo "SKIP_EXISTING -> $OUT/$PAGE.png（设 FORCE_RECAPTURE=1 强制重截）"
+  exit 0
+fi
 
 ADB_BIN="${ADB_BIN:-$(command -v adb || true)}"
 if [ -z "${ADB_BIN}" ] && [ -x "$HOME/Library/Android/sdk/platform-tools/adb" ]; then

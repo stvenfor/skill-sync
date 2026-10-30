@@ -1,4 +1,6 @@
-## 3. Android 自动截图（视觉真值轨）
+## 3. 视觉真值截图轨（Android / iOS 可选）
+
+视觉真值端由 **`SHOT_PLATFORM=android|ios`** 选定（默认 **android**，兼容旧派单）。同一模块一轮只认一端 PNG；禁止把 android-shots 与 ios-shots 混作同一 DEVICE 对比源。
 
 ## 脚本入口（本 skill）
 
@@ -6,50 +8,69 @@
 
 | 脚本 | 作用 |
 |---|---|
-| `scripts/capture.sh` | 真机/模拟器前台页 → PNG+控件树+测量表 → `~/Desktop/android-shots/<module>/` |
-| `scripts/measure.py` | uiautomator XML → dp 表 |
-| `scripts/run_shots.sh` | 模块目录引导 / 单页封装 |
-| `scripts/ios_index.sh` | iOS 关键词只读索引 |
-| `scripts/harmony_shot.sh` | 鸿蒙 hdc 截图并排 |
-| `scripts/interact.sh` | 点击 / 滑动 / 长按（adb input） |
-| `scripts/compare_shots.py` | Android vs 鸿蒙像素差（默认阈值 1%） |
+| `scripts/capture.sh` | **仅 Android**：前台页 → PNG+控件树+测量表 → `~/Desktop/android-shots/<module>/` |
+| `scripts/ios_capture.sh` | **仅 iOS**：真机/模拟器前台页 → PNG+meta → `~/Desktop/ios-shots/<module>/` |
+| `scripts/ios_interact.sh` | iOS 到达态说明（stub；优先深链/人工导航） |
+| `scripts/measure.py` | uiautomator XML → dp 表（Android） |
+| `scripts/run_shots.sh` | 按 `SHOT_PLATFORM` 选 capture / ios_capture |
+| `scripts/ios_index.sh` | iOS 关键词只读索引（逻辑源，不是截图） |
+| `scripts/harmony_shot.sh` | 鸿蒙 hdc 截图并排（落在**选定平台**桌面根） |
+| `scripts/interact.sh` | 点击 / 滑动 / 长按（adb input，Android） |
+| `scripts/compare_shots.py` | 选定真值端 vs 鸿蒙像素差（默认阈值 1%） |
 | `scripts/verify_harmony.sh` | 鸿蒙同态截图 + 对比；超阈值提示同步优化 |
 | `scripts/compress_png.sh` | PNG **无损**压缩（oxipng/optipng/pngcrush/Pillow） |
 
-模板：`templates/shots-manifest.example.yaml`。产物**不进 git**。已有 PNG **默认复用**。
+模板：`templates/shots-manifest.example.yaml`（含 `platform` 字段）。产物**不进 git**。已有 PNG **默认复用**。
 
 ---
 
+### 3.0 真机端选择（android | ios）
+
+| 项 | 规则 |
+|---|---|
+| 选择器 | 环境 / manifest：`SHOT_PLATFORM=android|ios`；**默认 android** |
+| 派单 | SHOT 帽子**必须写死** `真机端: android` 或 `真机端: ios`；未写按 android |
+| 一轮一真值 | 同一模块本轮只认一端；**禁止**混用两端 PNG 当 DEVICE 对比源 |
+| Android 根 | `~/Desktop/android-shots/<module>/`（`ANDROID_SHOTS_ROOT`） |
+| iOS 根 | `~/Desktop/ios-shots/<module>/`（`IOS_SHOTS_ROOT`） |
+| 脚本 | android → `capture.sh` / `interact.sh`；ios → `ios_capture.sh` / `ios_interact.sh` |
+| H5 | 两端均适用 §3.9：WebView/H5 **禁止截图** |
+
+派单片段示例见 SKILL / §G.2.1。
 
 ### 3.1 架构（清单驱动，禁止盲爬）
 
 ```text
-shots-manifest.yaml
-    → Shot Runner（Instrumentation 优先；adb 仅过渡）
-    → Mac 桌面按模块目录（权威落盘，不进 git）
-         ~/Desktop/android-shots/<module>/
-         A-<page>-<state>-<seq>.png
+shots-manifest.yaml（含 platform: android|ios）
+    → Shot Runner（Android: Instrumentation/adb；iOS: ios_capture / 深链）
+    → Mac 桌面按「选定平台」模块目录（权威落盘，不进 git）
+         ~/Desktop/android-shots/<module>/   # SHOT_PLATFORM=android
+         ~/Desktop/ios-shots/<module>/       # SHOT_PLATFORM=ios
+         A-<page>-<state>-<seq>.png 或 <page>.png
          00-index.md
          run-report.json
 ```
 
-默认栈：YAML 清单 + Debug/正式深链打开页 + UI Automator/Espresso/Compose Test + 截屏落盘 + 生成索引。
+默认栈（Android）：YAML 清单 + Debug/正式深链打开页 + UI Automator/Espresso/Compose Test + 截屏落盘 + 生成索引。
+iOS：清单同构；截屏走 `ios_capture.sh`（devicectl / idevicescreenshot / simctl）。
 
 ### 3.1.1 设备目标（真机与模拟器）
 
-- 自动化截图脚本**既可截真机上已安装应用，也可截模拟器上已实际安装的应用**（同一套清单与 Runner）。
-- 运行前用 `adb devices`（或等价）确认目标在线；多设备时用 `-s <serial>` / manifest `deviceSerial` 钉死一台，禁止盲选。
-- 目标上须**已安装**对应包名应用（正式包或可深链的 debug 包）；未安装则停，先装再跑，不改清单凑合。
-- 真机与模拟器产出的文件名规则相同；`run-report.json` 记 `deviceSerial`、型号/AVD 名、 density，便于 DEVICE 对照时知悉来源。
-- 像素门禁默认固定一种 profile（优先约定模拟器 profile）；换真机分辨率时在 index 注明，不与另一 profile 混比。
+- 自动化截图脚本**既可截真机上已安装应用，也可截模拟器上已实际安装的应用**（同一套清单；脚本按 `SHOT_PLATFORM` 分流）。
+- **Android**：`adb devices` 确认在线；多设备 `ANDROID_SERIAL` / manifest `deviceSerial`；须已安装目标包。
+- **iOS**：连接并信任真机（开发者模式）或 Booted 模拟器；多设备 `IOS_UDID` / `IOS_SERIAL`；须已安装目标 App。
+- 真机与模拟器产出的文件名规则相同；index / meta 记 serial 或 udid、platform，便于 DEVICE 知悉来源。
+- 像素门禁默认固定一种 profile；换分辨率时在 index 注明，不与另一 profile 混比；**更不与另一平台 PNG 混比**。
 
 ### 3.1.2 Mac 桌面落盘与目录（统一管理，不做 git 管理）
 
-- **权威根目录（本机 Mac）：** `~/Desktop/android-shots/`（可用环境变量 `ANDROID_SHOTS_ROOT` 覆盖，默认即桌面该文件夹）。
-- **按模块新建子文件夹统一管理：** `~/Desktop/android-shots/<module>/`；模块名与 manifest `modules[].id` 一致（稳定英文短名）。
-- 单次 run 可再分子目录 `runs/<timestamp>/`，稳定真值可提升/拷贝到模块根或 `current/`，index 指向选用的那套。
-- **不做 git 管理：** 截图 PNG、index、run-report **禁止** `git add` / commit / 放进仓库跟踪目录；勿写入鸿蒙仓、Android 仓的 `artifacts/` 并提交。脚本与 `shots-manifest.yaml` 可留在工程 tools（若入库），产物只落桌面。
-- 鸿蒙对照时：CLARIFY / DEVICE / 对照点表引用桌面路径下的**具体文件名**；需要时只读拷贝到对话附件或本机 bridge 的**本地 ignore 区**，仍不进 git。
+- **权威根目录（本机 Mac，按选定平台二选一）：**
+  - Android：`~/Desktop/android-shots/`（`ANDROID_SHOTS_ROOT`）
+  - iOS：`~/Desktop/ios-shots/`（`IOS_SHOTS_ROOT`）
+- **按模块子文件夹：** `<根>/<module>/`；模块名与 manifest `modules[].id` 一致（稳定英文短名）。
+- 单次 run 可再分子目录 `runs/<timestamp>/`，稳定真值可提升到模块根或 `current/`，index 指向选用的那套。
+- **不做 git 管理：** 截图 PNG、index、run-report **禁止** `git add` / commit；勿写入业务仓 `artifacts/`。产物只落桌面。
+- 鸿蒙对照时：引用**当前选定平台**桌面路径下的具体文件名；只读拷贝到 ignore 区仍不进 git。
 
 ### 3.2 Manifest 最小字段
 
@@ -97,24 +118,23 @@ shots-manifest.yaml
 
 ### 3.8 与鸿蒙衔接
 
-视觉真值以 **Mac 桌面** `~/Desktop/android-shots/<module>/` 的稳定 run 为准（见 §3.1.2），**不进 git**。CLARIFY 映射表与 DEVICE 期望**必须写具体文件名**（可写桌面相对路径），禁止「列表正常」。对照点表「源文件和控件」列应能指回截图号或源类名。若流水线需要本地 `sync/<module>/android-shots/` 镜像，仅作只读拷贝且同样 ignore，不以仓内副本为唯一真值。
+视觉真值以 **Mac 桌面「选定平台」根**下该模块的稳定 run 为准（android-shots **或** ios-shots，见 §3.0 / §3.1.2），**不进 git**。CLARIFY 映射表与 DEVICE 期望**必须写具体文件名**，禁止「列表正常」。对照点表「源文件和控件」列应能指回截图号或源类名。本地 `sync/<module>/…-shots/` 镜像仅只读 ignore，不以仓内副本为唯一真值。
 
 ---
 
 ### 3.9 H5 / WebView 页（忽略，禁止截图）
 
 - **判定**：页面主体为 H5 / WebView / 内嵌浏览器 / 打开外链网页（含半屏 Web 容器盖住原生主内容）→ **本轨忽略，禁止截图**。
-- **动作**：不写入 shots-manifest 的 P0/P1；不调用 `capture.sh` / `interact.sh` 对该态落盘；index 可记一行 `SKIP_H5: <入口说明>`，**不**产出 PNG 当真值。
+- **动作**：不写入 shots-manifest 的 P0/P1；不调用 `capture.sh` / `ios_capture.sh` / `interact.sh` 对该态落盘；index 可记一行 `SKIP_H5: <入口说明>`，**不**产出 PNG 当真值。
 - **同步**：H5 页**不进**对照点表 CODE、不对拍、不要求鸿蒙原生重做（除非用户当轮书面改口「H5 也要原生」）。
 - **边界**：原生壳 + 局部 Web 若壳层是验收对象，只截**原生壳**态；Web 内容区仍标 H5 忽略。无法区分时停问，默认按 H5 忽略。
 
 ### 3.10 已有截图优先（禁止无故重截）
 
-
-1. 跑截图前先查 `~/Desktop/android-shots/<module>/`（及 index）：目标 `file` **已存在且非空** → **默认复用**，记 `SKIP_EXISTING`，不调 adb/hdc 重截。
+1. 跑截图前先查**当前选定平台**桌面根下 `<module>/`（及 index）：目标 `file` **已存在且非空** → **默认复用**，记 `SKIP_EXISTING`，不调 adb / ios 截屏 / hdc 重截。
 2. 仅在以下情况重截：`FORCE_RECAPTURE=1` / `--force`；或 index 标注「源 UI 变更须刷新」；或文件损坏/0 字节。
-3. `scripts/capture.sh` 已实现上述 SKIP；Runner / Instrumentation 路径须同等实现（manifest 可写 `reuse: prefer_existing`，默认 true）。
-4. 复用时仍须核对：文件名与 `page+state` 对应、分辨率 profile 与本轮 DEVICE 一致；profile 变了才允许重截并更新 index。
+3. `scripts/capture.sh` 与 `scripts/ios_capture.sh` 已实现上述 SKIP；Runner 路径须同等实现（manifest `reuse: prefer_existing`，默认 true）。
+4. 复用时仍须核对：文件名与 `page+state` 对应、平台与本轮 `SHOT_PLATFORM` 一致、分辨率 profile 与 DEVICE 一致；换平台或 profile 才允许重截并更新 index。
 
 ### 3.11 点击 / 拖动等交互（评估结论：支持）
 
@@ -135,31 +155,44 @@ shots-manifest.yaml
 
 ### 3.12 鸿蒙真机还原验证与 ≤1% 差异门
 
-Android 截图齐套（或复用完成）后，**必须**在鸿蒙真机按同一入口/态还原并截图对拍：
+选定平台截图齐套（或复用完成）后，**必须**在鸿蒙真机按同一入口/态还原并截图对拍（真值 = android-shots **或** ios-shots，由 `SHOT_PLATFORM` 决定）：
 
 ```text
-Android 真值 PNG
+选定视觉真值端 PNG（android-shots 或 ios-shots）
     → 鸿蒙打开同态（深链 / 同操作路径）
-    → scripts/harmony_shot.sh
+    → scripts/harmony_shot.sh   # 落在同一选定根
     → scripts/compare_shots.py（默认 threshold=0.01）
-    → scripts/verify_harmony.sh <page> <module>
+    → SHOT_PLATFORM=… scripts/verify_harmony.sh <page> <module>
 ```
 
 | 结果 | 动作 |
 |---|---|
 | 差异像素占比 **≤ 1%** | DEVICE 该态 PASS（仍须对照点表语义回勾） |
-| 差异 **> 1%** | **同步优化**：对照点表回勾差异 → 只改表内鸿蒙文件 → 重编装 → 再 `verify_harmony`；禁止改 Android 真值凑绿 |
-| 缺 Android 真值 | 先 §3.10 复用或补截，禁止只截鸿蒙空比 |
+| 差异 **> 1%** | **同步优化**：对照点表回勾差异 → 只改表内鸿蒙文件 → 重编装 → 再 `verify_harmony`；禁止改视觉真值 PNG 凑绿 |
+| 缺选定端真值 | 先 §3.10 复用或补截，禁止只截鸿蒙空比 |
 
 排除（不进 1% 像素门，须在 index/note 标明）：状态栏/刘海、系统字体缩放、stitch 附录、随机波形/未钉死 Lottie 帧。P0 主路径与关键弹层**不得**借排除项逃门。
 
-落盘：`$OUT/<page>.harmony.png` + `<page>.compare.json`（不做 git 管理）。
+落盘：选定平台 `$OUT/<page>.harmony.png` + `<page>.compare.json`（不做 git 管理）。
 
 
 ### 3.13 截图后无损压缩（自动）
 
-- `capture.sh` / `harmony_shot.sh` 写出 PNG 后**自动**调用 `scripts/compress_png.sh`。
+- `capture.sh` / `ios_capture.sh` / `harmony_shot.sh` 写出 PNG 后**自动**调用 `scripts/compress_png.sh`。
 - **只做无损**：不改像素；优先 `oxipng` → `optipng` → `pngcrush` → Pillow `optimize+compress_level=9`。
 - 本机建议安装其一：`brew install oxipng` 或 `optipng`（体积更小、更快）。
-- 批量补压：`bash scripts/compress_png.sh ~/Desktop/android-shots/<module>/*.png`
+- 批量补压：`bash scripts/compress_png.sh ~/Desktop/<android|ios>-shots/<module>/*.png`
 - 压缩失败不阻断截图流程（`|| true`）；产物仍不进 git。
+
+### 3.14 iOS 真机 / 模拟器截图轨
+
+- **入口**：`bash scripts/ios_capture.sh <page> [module]`；环境 `SHOT_PLATFORM=ios`，落盘 `~/Desktop/ios-shots/<module>/`。
+- **设备**：物理真机（已信任 + 开发者模式）或 Booted 模拟器；多设备 `export IOS_UDID=<udid>`（或 `IOS_SERIAL`）。
+- **截屏顺序**（失败则下一项，错误信息要可读）：
+  1. `xcrun devicectl` / `xcdevice take-screenshot`（Xcode，偏真机）
+  2. `idevicescreenshot`（PATH 上有 libimobiledevice 时）
+  3. 仅模拟器：`xcrun simctl io <udid|booted> screenshot`
+- **复用**：非空 PNG → `SKIP_EXISTING`；`FORCE_RECAPTURE=1` 重截；写出后 `compress_png.sh`；追加 `00-index.md` + `<page>.meta.txt`（含 `platform: ios`、udid）。
+- **到达态**：优先深链 / 人工导航；`ios_interact.sh` 本轮仅为说明 stub，不强制 XCUITest。
+- **与逻辑源区分**：`ios_index.sh` 仍只做源码关键词索引，**不是**视觉截图。
+- **Caveat**：真机需开发者模式与电脑信任；部分 macOS/Xcode 组合下 `devicectl` 截屏子命令可能变更——失败时看脚本报错并改用 idevicescreenshot 或模拟器。

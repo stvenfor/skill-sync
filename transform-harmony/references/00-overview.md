@@ -2,7 +2,7 @@
 
 ## 一句话结论
 
-- **看见什么** → Android 自动截图集（按屏、按态）
+- **看见什么** → 选定平台（`SHOT_PLATFORM=android|ios`，默认 android）自动截图集（按屏、按态）
 - **怎么算/怎么走** → iOS（或约定的逻辑源端）源码：状态机、接口、边界、回写
 - **代码怎么放、怎么写** → **只跟目标鸿蒙仓既有分层、路由、组件、命名与门禁**；禁止按 Android Activity / iOS Pod 目录镜像
 - **对照原项目实现，不要用鸿蒙系统组件替换设计稿**
@@ -17,7 +17,7 @@
 
 ```text
 sync/<module>/
-  android-shots/     # 指向或镜像桌面 ~/Desktop/android-shots/<module>/；权威在桌面，不进 git
+  android-shots/     # 或 ios-shots/：指向桌面选定平台根；权威在桌面，不进 git
   ios-logic/         # map.md + notes-state-machine.md（或等价）
   harmony-anchor/    # where-to-put.md + patterns.md
   shots-manifest.yaml
@@ -26,7 +26,7 @@ sync/<module>/
 
 | 资产 | 必须有 |
 |---|---|
-| Android 截图索引 | 主路径 + 关键态；文件名稳定可检索 |
+| 选定平台截图索引 | 主路径 + 关键态；文件名稳定可检索；平台与 `SHOT_PLATFORM` 一致 |
 | 逻辑源映射 | 入口类/方法、API、分支表 |
 | 鸿蒙落点 | feature / pages / api / model / 路由；必须复用的组件名单 |
 | 对照点表 | §B 五列齐；无系统替代/待定 |
@@ -47,7 +47,7 @@ sync/<module>/
 
 | 维度 | 第一真值 | 第二参考 | 禁止 |
 |---|---|---|---|
-| 布局 / 区块 / 主按钮 / 空态外观 / 动效观感 | Android 截图集 | 与截图一致的设计稿 | 用鸿蒙现状或「差不多」当期望；**禁系统组件顶替设计稿** |
+| 布局 / 区块 / 主按钮 / 空态外观 / 动效观感 | 选定平台截图集（android 或 ios） | 与截图一致的设计稿 | 用鸿蒙现状或「差不多」当期望；**禁系统组件顶替设计稿**；禁混用两端 PNG |
 | 入口参数、状态机、分支、API、回写、权限失败 | 逻辑源端源码 | 接口文档 | 只看 Android UI 猜逻辑 |
 | 目录、导航、DI、网络、弹框/图标、播放器/评测复用 | 鸿蒙仓同类已有实现 | 同仓已验收范例 | 镜像 Android/iOS 工程树 |
 
@@ -67,7 +67,7 @@ sync/<module>/
 |---|---|---|
 | S0 范围 | `CLARIFY_<MODULE>_SCOPE.md` | 非目标、完成定义、硬门写死 |
 | S1 结构 | `CLARIFY_<MODULE>_STRUCTURE.md` | 映射表 + 双树 + 偏差 + **分支表** |
-| S2 截图 | `android-shots/` + index | P0 态齐；**已有图优先复用**；清单可过滤；交互见 actions[] |
+| S2 截图 | 选定平台桌面根 + index | P0 态齐；**已有图优先复用**；清单可过滤；`SHOT_PLATFORM` 写死；交互见 actions[] / 深链 |
 | S2b 对照点 | `mapping-table.md`（§B） | 五列齐；无系统替代/待定；资源缺失已裁定 |
 | S3 WBS/PROMPT | 可独立派的切片提示词 | 视觉轨含 Must-fix 三段；白名单 ⊆ 对照表 |
 | S4 STAGE_A | Must-fix、TC、资源核对 | 缺分支表/资源/对照表 → 不派 B |
@@ -79,4 +79,4 @@ sync/<module>/
 
 ---
 
-指定整模块转换时，另读 **§F-module-sync-tracks**（五轨清单）；缺轨不得报完成。
+指定整模块转换时，另读 **§F-module-sync-tracks**（五轨清单）；缺轨不得报完成。视觉真值平台可选（§C.3.0）。

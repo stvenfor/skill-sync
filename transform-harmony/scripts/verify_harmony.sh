@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# 鸿蒙真机还原验证：对同一 page 截鸿蒙图，与 Android 真值比差异。
+# 鸿蒙真机还原验证：对同一 page 截鸿蒙图，与「选定视觉真值端」PNG 比差异。
 # 用法: verify_harmony.sh <页面名> <模块名> [--threshold 0.01]
-# 前置：鸿蒙设备已打开对应态；Android 真值已存在于桌面模块目录。
+# 前置：鸿蒙设备已打开对应态；真值 PNG 已在选定平台桌面根（SHOT_PLATFORM=android|ios）。
+# SHOT_PLATFORM 默认 android → ~/Desktop/android-shots；ios → ~/Desktop/ios-shots。
 # 差异 > 阈值 → exit 1，并提示进入「同步优化」（按对照点表只改表内文件）。
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -15,10 +16,14 @@ while [ $# -gt 0 ]; do
     *) shift ;;
   esac
 done
-SHOTS_ROOT="${ANDROID_SHOTS_ROOT:-$HOME/Desktop/android-shots}"
+PLATFORM="${SHOT_PLATFORM:-android}"
+case "$PLATFORM" in
+  ios) SHOTS_ROOT="${IOS_SHOTS_ROOT:-$HOME/Desktop/ios-shots}" ;;
+  android|*) PLATFORM=android; SHOTS_ROOT="${ANDROID_SHOTS_ROOT:-$HOME/Desktop/android-shots}" ;;
+esac
 OUT="$SHOTS_ROOT/$MODULE"
 A="$OUT/$PAGE.png"
-[ -f "$A" ] || { echo "缺 Android 真值: $A（先 capture 或确认已有截图）" >&2; exit 2; }
+[ -f "$A" ] || { echo "缺视觉真值($PLATFORM): $A（先 capture/ios_capture 或确认已有截图）" >&2; exit 2; }
 
 "$ROOT/harmony_shot.sh" "$PAGE" "$MODULE"
 H="$OUT/$PAGE.harmony.png"

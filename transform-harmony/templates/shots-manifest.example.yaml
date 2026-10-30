@@ -1,10 +1,15 @@
-# 产物落 ~/Desktop/android-shots/<module>/（不进 git）
+# 产物落选定平台桌面根（不进 git）：
+#   platform: android → ~/Desktop/android-shots/<module>/
+#   platform: ios     → ~/Desktop/ios-shots/<module>/
 # reuse.preferExisting 默认 true：目标 file 已存在则跳过重截
 version: 1
+# platform: android | ios（与 SHOT_PLATFORM / 派单「真机端」一致；默认 android）
+platform: android
 appId: com.example.app
 reuse:
   preferExisting: true
-# deviceSerial: emulator-5554
+# deviceSerial: emulator-5554   # Android
+# iosUdid: "00008030-…"         # iOS（或环境变量 IOS_UDID）
 defaultDevice: phone_portrait
 login:
   required: true

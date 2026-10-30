@@ -12,7 +12,7 @@ description: >-
 ## 何时用
 
 - Android / iOS → 鸿蒙整模块对齐
-- 需要自动截图（**真机或已装应用的模拟器**）作视觉真值；截图按模块落 **Mac 桌面**、**不进 git**
+- 需要自动截图（**Android 或 iOS 真机/已装应用的模拟器**，由 `SHOT_PLATFORM` 选定）作视觉真值；截图按模块落 **Mac 桌面**、**不进 git**
 - 对照源码转码，严格鸿蒙规范；对照点表先只读再改码
 - 整模块要提速：并行勘察 + 多 worktree 改码再合并（见 §G）
 
@@ -30,18 +30,18 @@ references/              # 规范规则（按层 Read）
   00-overview.md         # 齐套 / 真值 / 阶段门禁
   A-execution.md         # 角色 / Codegraph / Ponytail / Git / TASK / 交卷 / 队列
   B-mapping-table.md     # 对照点表五列 + Lottie
-  C-android-shots.md     # 截图轨 + 桌面落盘
+  C-android-shots.md     # 截图轨（android|ios）+ 桌面落盘
   D-logic-source.md      # 逻辑源勘察
   E-harmony-norms.md     # 鸿蒙落点 / ArkTS / Must-fix / DEVICE
   F-module-sync-tracks.md # 指定模块五轨（截图/逻辑/UI/资源/交互）
   G-parallel-worktree.md # 并行勘察 / 多 worktree 改码 / 合并 / 派 agent
 scripts/                 # 可执行脚本（产物不进 git）
-  capture.sh interact.sh measure.py run_shots.sh ios_index.sh
-  harmony_shot.sh compare_shots.py verify_harmony.sh compress_png.sh
+  capture.sh ios_capture.sh interact.sh ios_interact.sh measure.py run_shots.sh
+  ios_index.sh harmony_shot.sh compare_shots.py verify_harmony.sh compress_png.sh
 templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互 / 交卷
 ```
 
-相对路径均相对 **本 skill 目录**。打开某层用 Read；跑脚本在本机 Mac：`bash <skill>/scripts/capture.sh …`。
+相对路径均相对 **本 skill 目录**。打开某层用 Read；跑脚本在本机 Mac：`bash <skill>/scripts/capture.sh …` 或 `ios_capture.sh …`（按 `SHOT_PLATFORM`）。
 
 
 ## 存放位置（硬）
@@ -50,12 +50,12 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 - **Grok Bot 侧**：同一 skill（id `skill-1793292690508`），helpers 与上面对齐
 - **禁止**把本 skill 的脚本/规范/模板/说明拷进业务仓（如 `Dubbing/docs/`）
 - 业务仓只保留产品/模块本身的 shots-manifest 业务条目（若需要）；Runner 引用 skill 内 `scripts/`
-- 截图产物仍只落 `~/Desktop/android-shots/<module>/`，不进 git、不进 skill 仓
+- 截图产物只落选定平台桌面根：`~/Desktop/android-shots/<module>/` 或 `~/Desktop/ios-shots/<module>/`，不进 git、不进 skill 仓
 
 
 ## 一句话结论
 
-- **看见什么** → Android 自动截图（桌面 `~/Desktop/android-shots/<module>/`）
+- **看见什么** → 选定平台自动截图（`SHOT_PLATFORM=android|ios` → `android-shots` 或 `ios-shots`）
 - **怎么算** → 逻辑源源码（状态机 / API / 回写）
 - **怎么写** → 只跟鸿蒙仓既有架构；**禁系统组件顶替设计稿**
 - **怎么并行** → 只读勘察可并行；改码一切片一 worktree（白名单互斥）；**合后再 DEVICE**；agent **按切片认领帽子**（SHOT/CODE/…可换），不固定谁永远截图
@@ -78,7 +78,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 ## 编排顺序（必须按序）
 
 1. Read `references/00-overview.md` → 齐套与 S0–S7；缺资产停。
-2. 截图轨：Read `references/C-android-shots.md`；**已有图优先复用**；缺图再用 `capture.sh` / `run_shots.sh`；需点击滑动用 `interact.sh` 或 manifest `actions[]`。
+2. 截图轨：Read `references/C-android-shots.md`；写死 `SHOT_PLATFORM` / `真机端`；**已有图优先复用**；缺图按平台选 `capture.sh`（android）或 `ios_capture.sh`（ios），或 `run_shots.sh`；Android 点击用 `interact.sh` / manifest `actions[]`，iOS 优先深链/人工导航。
 3. 逻辑/资源/交互勘察：Read §D + §F；**可并行只读**（见 §G）；需要时 `scripts/ios_index.sh <关键词>`。
 4. 对照点：Read `references/B-mapping-table.md`；只读源码填 `templates/mapping-table.md`；有「系统替代/待定/缺失」→ **停问**，勿写码。【串行定稿】
 5. CODE 前：Read `references/A-execution.md` + `references/E-harmony-norms.md` + **`G-parallel-worktree.md`**；ACTIVE 联动；Codegraph + Ponytail；互斥切片 → 多 worktree；只改表内文件。
@@ -88,13 +88,13 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 
 | 门 | 要求 |
 |---|---|
-| 截图落盘 | `~/Desktop/android-shots/<module>/`；**已有优先复用**；写出后**自动无损压缩**；**不做 git 管理** |
+| 截图落盘 | `SHOT_PLATFORM=android|ios`（默认 android）；android → `~/Desktop/android-shots/<module>/`，ios → `~/Desktop/ios-shots/<module>/`；一轮只认一端；**已有优先复用**；写出后**自动无损压缩**；**不做 git 管理** |
 | H5 | WebView/H5/内嵌网页 **忽略、禁止截图**；不进 P0 真值与对拍（§C.3.9） |
-| 交互抓取 | manifest `actions[]` + `interact.sh`（click/swipe/longpress）；能深链直达优先深链 |
+| 交互抓取 | Android：manifest `actions[]` + `interact.sh`；iOS：深链/人工 + `ios_interact.sh`（stub）；能深链直达优先深链 |
 | 鸿蒙对拍 | `verify_harmony.sh`；像素差默认 **≤1%**；超则同步优化（只改表内鸿蒙文件）；**仅 merge 后** |
 | 并行 | 勘察可并行；CODE 白名单无交集；一切片一 worktree；禁同分支抢写 |
 | 字重 | Android 非粗 → 鸿蒙禁自行 Bold/Medium；真值看截图/源 textStyle（§B.5 / §E.5.3.12） |
-| 设备 | 真机 **或** 模拟器，均须**已安装**目标应用；多设备 `ANDROID_SERIAL`；DEVICE 不并行抢同一设备 |
+| 设备 | 真机端 android|ios；真机 **或** 模拟器均须**已安装**目标应用；Android 多设备 `ANDROID_SERIAL`；iOS 多设备 `IOS_UDID`/`IOS_SERIAL`；DEVICE 不并行抢同一鸿蒙设备 |
 | 对照表 | 五列齐；禁「类似弹框」；资源缺失写「缺失，停止」 |
 | Lottie | 创建时机 / json / 播完切换 / 循环；禁 Canvas scale；禁 setTimeout 当结束 |
 | Git | 默认禁 commit/push；截图产物禁 add；worktree 分支按 TASK 允许再 commit |
