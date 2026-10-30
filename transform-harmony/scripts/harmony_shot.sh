@@ -20,6 +20,7 @@ fi
 "$HDC_BIN" shell rm -f /data/local/tmp/qpy_shot.png >/dev/null 2>&1 || true
 "$HDC_BIN" shell snapshot_display -f /data/local/tmp/qpy_shot.png >/dev/null
 "$HDC_BIN" file recv /data/local/tmp/qpy_shot.png "$OUT/$PAGE.harmony.png"
+"$(dirname "$0")/compress_png.sh" "$OUT/$PAGE.harmony.png" || true
 "$HDC_BIN" shell rm -f /data/local/tmp/qpy_shot.png >/dev/null 2>&1 || true
 
 echo "OK -> $OUT/$PAGE.harmony.png（对照 $OUT/$PAGE.png）"

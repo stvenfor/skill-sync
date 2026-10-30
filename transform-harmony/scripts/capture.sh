@@ -3,7 +3,7 @@
 # 真机或模拟器均可（目标须已安装应用，且 adb 在线）。
 # 用法: capture.sh <页面名> [模块名]
 # 落盘: $ANDROID_SHOTS_ROOT/<module>/  默认 ~/Desktop/android-shots/<module>/
-# 产物不做 git 管理。
+# 产物不做 git 管理；PNG 截后自动无损压缩。
 set -euo pipefail
 
 PAGE="${1:?用法: capture.sh <页面名> [模块名]}"
@@ -35,6 +35,9 @@ SIZE="$("$ADB_BIN" "${SERIAL_ARGS[@]}" shell wm size | sed 's/.*: //')"
 SERIAL="$("$ADB_BIN" "${SERIAL_ARGS[@]}" get-serialno 2>/dev/null || echo unknown)"
 
 "$ADB_BIN" "${SERIAL_ARGS[@]}" exec-out screencap -p > "$OUT/$PAGE.png"
+
+# 无损压缩截图
+"$(dirname "$0")/compress_png.sh" "$OUT/$PAGE.png" || true
 if ! "$ADB_BIN" "${SERIAL_ARGS[@]}" shell uiautomator dump /sdcard/qpy_ui.xml >/dev/null 2>&1; then
   echo "uiautomator dump 失败：该页面可能禁止抓取，只用截图目测" >&2
   rm -f "$OUT/$PAGE.xml" "$OUT/$PAGE.measure.md"

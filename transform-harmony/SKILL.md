@@ -34,7 +34,7 @@ references/              # 规范规则（按层 Read）
   F-module-sync-tracks.md # 指定模块五轨（截图/逻辑/UI/资源/交互）
 scripts/                 # 可执行脚本（产物不进 git）
   capture.sh interact.sh measure.py run_shots.sh ios_index.sh
-  harmony_shot.sh compare_shots.py verify_harmony.sh
+  harmony_shot.sh compare_shots.py verify_harmony.sh compress_png.sh
 templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互 / 交卷
 ```
 
@@ -82,7 +82,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 
 | 门 | 要求 |
 |---|---|
-| 截图落盘 | `~/Desktop/android-shots/<module>/`；**已有优先复用**（`FORCE_RECAPTURE=1` 才重截）；**不做 git 管理** |
+| 截图落盘 | `~/Desktop/android-shots/<module>/`；**已有优先复用**；写出后**自动无损压缩**；**不做 git 管理** |
 | 交互抓取 | manifest `actions[]` + `interact.sh`（click/swipe/longpress）；能深链直达优先深链 |
 | 鸿蒙对拍 | `verify_harmony.sh`；像素差默认 **≤1%**；超则同步优化（只改表内鸿蒙文件） |
 | 设备 | 真机 **或** 模拟器，均须**已安装**目标应用；多设备 `ANDROID_SERIAL` |

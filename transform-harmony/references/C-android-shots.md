@@ -14,6 +14,7 @@
 | `scripts/interact.sh` | 点击 / 滑动 / 长按（adb input） |
 | `scripts/compare_shots.py` | Android vs 鸿蒙像素差（默认阈值 1%） |
 | `scripts/verify_harmony.sh` | 鸿蒙同态截图 + 对比；超阈值提示同步优化 |
+| `scripts/compress_png.sh` | PNG **无损**压缩（oxipng/optipng/pngcrush/Pillow） |
 
 模板：`templates/shots-manifest.example.yaml`。产物**不进 git**。已有 PNG **默认复用**。
 
@@ -145,3 +146,12 @@ Android 真值 PNG
 排除（不进 1% 像素门，须在 index/note 标明）：状态栏/刘海、系统字体缩放、stitch 附录、随机波形/未钉死 Lottie 帧。P0 主路径与关键弹层**不得**借排除项逃门。
 
 落盘：`$OUT/<page>.harmony.png` + `<page>.compare.json`（不做 git 管理）。
+
+
+### 3.12 截图后无损压缩（自动）
+
+- `capture.sh` / `harmony_shot.sh` 写出 PNG 后**自动**调用 `scripts/compress_png.sh`。
+- **只做无损**：不改像素；优先 `oxipng` → `optipng` → `pngcrush` → Pillow `optimize+compress_level=9`。
+- 本机建议安装其一：`brew install oxipng` 或 `optipng`（体积更小、更快）。
+- 批量补压：`bash scripts/compress_png.sh ~/Desktop/android-shots/<module>/*.png`
+- 压缩失败不阻断截图流程（`|| true`）；产物仍不进 git。
