@@ -10,3 +10,5 @@
 | `E-harmony-norms.md` | 鸿蒙落点、ArkTS、Must-fix、DEVICE、质量清单 |
 
 脚本在 `../scripts/`，模板在 `../templates/`。执行时按 SKILL.md 编排顺序 Read 对应层，勿整份糊进上下文。
+
+**存放**：本目录仅存在于 `~/.agents/skills/transform-harmony/`（及 Bot 侧同 id skill），禁止镜像进业务仓。

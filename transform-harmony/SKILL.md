@@ -39,6 +39,15 @@ templates/               # 清单 / 对照表 / 交卷 / ACTIVE 示例
 
 相对路径均相对 **本 skill 目录**。打开某层用 Read；跑脚本在本机 Mac：`bash <skill>/scripts/capture.sh …`。
 
+
+## 存放位置（硬）
+
+- **唯一权威目录（本机）**：`~/.agents/skills/transform-harmony/`（脚本、规范、模板、文档全在此）
+- **Grok Bot 侧**：同一 skill（id `skill-1793292690508`），helpers 与上面对齐
+- **禁止**把本 skill 的脚本/规范/模板/说明拷进业务仓（如 `Dubbing/docs/`、工程 tools 当 skill 镜像）
+- 业务仓只保留产品/模块本身的 shots-manifest 业务条目（若需要）；Runner 脚本仍引用 skill 目录内 `scripts/`
+- 截图产物仍只落 `~/Desktop/android-shots/<module>/`，不进 git、不进 skill 仓
+
 ## 一句话结论
 
 - **看见什么** → Android 自动截图（桌面 `~/Desktop/android-shots/<module>/`）
