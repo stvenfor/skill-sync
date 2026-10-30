@@ -1,7 +1,8 @@
 ---
 name: transform-harmony
 description: >-
-  在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac 桌面、对照源码转码、指定模块五轨（截图/逻辑/UI/资源/交互）、对照点表与执行总则；可并行勘察与多 worktree 改码再合并；规则与脚本分层在
+  在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac
+  桌面、对照源码转码、指定模块五轨（截图/逻辑/UI/资源/交互）、对照点表与执行总则；可并行勘察与多 worktree 改码再合并；规则与脚本分层在
   references/ scripts/ templates/。
 ---
 # transform-harmony
@@ -91,6 +92,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 | 交互抓取 | manifest `actions[]` + `interact.sh`（click/swipe/longpress）；能深链直达优先深链 |
 | 鸿蒙对拍 | `verify_harmony.sh`；像素差默认 **≤1%**；超则同步优化（只改表内鸿蒙文件）；**仅 merge 后** |
 | 并行 | 勘察可并行；CODE 白名单无交集；一切片一 worktree；禁同分支抢写 |
+| 字重 | Android 非粗 → 鸿蒙禁自行 Bold/Medium；真值看截图/源 textStyle（§B.5 / §E.5.3.12） |
 | 设备 | 真机 **或** 模拟器，均须**已安装**目标应用；多设备 `ANDROID_SERIAL`；DEVICE 不并行抢同一设备 |
 | 对照表 | 五列齐；禁「类似弹框」；资源缺失写「缺失，停止」 |
 | Lottie | 创建时机 / json / 播完切换 / 循环；禁 Canvas scale；禁 setTimeout 当结束 |

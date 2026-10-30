@@ -51,7 +51,21 @@
 
 DEVICE 先验「时机与切换」再验观感；「随便播一个差不多的」破禁停手。
 
-### B.5 与 Must-fix / PROMPT 的衔接
+
+### B.5 字体字重对照（防鸿蒙擅自加粗）
+
+文字块在「源文件和控件」列或旁注写清字重真值，例如：`textSize=14 / typeface=sans-serif` 或 `textStyle=normal`；截图可辨时写「截图#N 非粗」。
+
+| 规则 | 要求 |
+|---|---|
+| 真值 | Android 布局/样式或截图观感；**不是**「鸿蒙标题习惯」 |
+| 默认 | 源端 normal / Regular → 鸿蒙 **不设 Bold/Medium**，用 Normal 或不写 fontWeight |
+| 才加粗 | 仅源端 `bold`/`medium`/对应 style，或截图明确更粗 |
+| 回勾 | DEVICE 时对标题、按钮文案、列表主副标题抽查：Android 不粗而鸿蒙粗 → **不一致**，须改码 |
+
+禁止在 CODE 时「为层次感」自行加粗；层次用字号/颜色/间距对齐截图，不靠臆造字重。
+
+### B.6 与 Must-fix / PROMPT 的衔接
 
 每条视觉/弹框/图标切片的 Must-fix 首段仍用「真值 + 禁区 + 证据」；**对照点表是 STAGE_A 前置产物**，缺表不得派 CODE。PROMPT/TASK 白名单路径必须 ⊆ 表中鸿蒙落点列。
 
