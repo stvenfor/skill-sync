@@ -1,7 +1,7 @@
 ---
 name: transform-harmony
 description: >-
-  在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac 桌面、对照源码转码、对照点表与执行总则；规则与脚本分层在
+  在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac 桌面、对照源码转码、指定模块五轨（截图/逻辑/UI/资源/交互）、对照点表与执行总则；规则与脚本分层在
   references/ scripts/ templates/。
 ---
 # transform-harmony
@@ -31,10 +31,11 @@ references/              # 规范规则（按层 Read）
   C-android-shots.md     # 截图轨 + 桌面落盘
   D-logic-source.md      # 逻辑源勘察
   E-harmony-norms.md     # 鸿蒙落点 / ArkTS / Must-fix / DEVICE
+  F-module-sync-tracks.md # 指定模块五轨（截图/逻辑/UI/资源/交互）
 scripts/                 # 可执行脚本（产物不进 git）
   capture.sh interact.sh measure.py run_shots.sh ios_index.sh
   harmony_shot.sh compare_shots.py verify_harmony.sh
-templates/               # 清单 / 对照表 / 交卷 / ACTIVE 示例
+templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互 / 交卷
 ```
 
 相对路径均相对 **本 skill 目录**。打开某层用 Read；跑脚本在本机 Mac：`bash <skill>/scripts/capture.sh …`。
@@ -44,15 +45,29 @@ templates/               # 清单 / 对照表 / 交卷 / ACTIVE 示例
 
 - **唯一权威目录（本机）**：`~/.agents/skills/transform-harmony/`（脚本、规范、模板、文档全在此）
 - **Grok Bot 侧**：同一 skill（id `skill-1793292690508`），helpers 与上面对齐
-- **禁止**把本 skill 的脚本/规范/模板/说明拷进业务仓（如 `Dubbing/docs/`、工程 tools 当 skill 镜像）
-- 业务仓只保留产品/模块本身的 shots-manifest 业务条目（若需要）；Runner 脚本仍引用 skill 目录内 `scripts/`
+- **禁止**把本 skill 的脚本/规范/模板/说明拷进业务仓（如 `Dubbing/docs/`）
+- 业务仓只保留产品/模块本身的 shots-manifest 业务条目（若需要）；Runner 引用 skill 内 `scripts/`
 - 截图产物仍只落 `~/Desktop/android-shots/<module>/`，不进 git、不进 skill 仓
+
 
 ## 一句话结论
 
 - **看见什么** → Android 自动截图（桌面 `~/Desktop/android-shots/<module>/`）
 - **怎么算** → 逻辑源源码（状态机 / API / 回写）
 - **怎么写** → 只跟鸿蒙仓既有架构；**禁系统组件顶替设计稿**
+
+
+## 指定模块怎么跑（五轨，必须全做）
+
+用户指定模块后，Read `references/F-module-sync-tracks.md`，按序：
+
+1. **截图** → §C（已有复用）
+2. **业务逻辑** → §D 分支表 → CODE 接通 API/状态/回写
+3. **UI 效果** → §B 对照点 + §E → DEVICE ≤1%
+4. **资源** → `templates/resource-inventory.md` 入仓再引用
+5. **交互效果** → `templates/interaction-matrix.md` + §B.4 Lottie；`interact.sh` / actions 仅用于到达态
+
+模板：`module-brief.md` / `resource-inventory.md` / `interaction-matrix.md`。五轨勾齐才算该模块转换完成。
 
 ## 编排顺序（必须按序）
 
@@ -78,6 +93,6 @@ templates/               # 清单 / 对照表 / 交卷 / ACTIVE 示例
 
 ## Done
 
-- 主路径可走通；P0 截图有 DEVICE 结论；对照表回勾；Must-fix / 禁区无破窗；交卷含 CODEGRAPH。
+- 指定模块五轨齐：截图 P0、逻辑分支接通、UI≤1%、资源入仓、交互矩阵验收；对照表回勾；交卷含 CODEGRAPH。
 
 详细条文只在 `references/`；本文件不重复展开。
