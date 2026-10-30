@@ -27,16 +27,19 @@
 | **4 资源** | 源端/设计导出文件 | 填 `templates/resource-inventory.md`；先入鸿蒙仓再引用 | 表内资源无「缺失，停止」未裁定；禁系统图标顶替 |
 | **5 交互效果** | 源端手势/动效/反馈 | 填 `templates/interaction-matrix.md`；Lottie 遵 §B.4 | 点击/滑动/反馈/动效时机与源一致；禁 setTimeout 当结束 |
 
-依赖顺序（可并行勘察，改码仍按序）：
+依赖顺序（可并行勘察，改码按白名单多 worktree，合后再 DEVICE）：
 
 ```text
 F.0 模块 brief
   → 轨1 截图（或复用）
-  → 轨2 逻辑勘察 + 轨4 资源盘点 + 轨5 交互矩阵（只读）
-  → 对照点表 §B（五列吃进 UI/资源/时序）
-  → CODE：逻辑接通 → 资源入仓 → UI 块 → 交互/动效
-  → DEVICE：verify_harmony ≤1% + 逻辑用例 + 交互用例
+  → 轨2 逻辑勘察 + 轨4 资源盘点 + 轨5 交互矩阵（只读，可并行）
+  → 对照点表 §B（五列吃进 UI/资源/时序）【串行定稿】
+  → CODE：互斥白名单 → 多 git worktree 并行；依赖序 逻辑→资源→UI→交互
+  → merge 各切片分支到主工作分支
+  → DEVICE：verify_harmony ≤1% + 逻辑用例 + 交互用例【仅合并后 · 单人】
 ```
+
+提速与派 agent 细节见 **§G-parallel-worktree**。
 
 ## F.2 与阶段门禁对应
 

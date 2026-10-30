@@ -113,7 +113,7 @@ FILES: （若有）路径 — 一行说明
 
 读完本 skill（尤其 **A. 执行总则** 与 **B. 对照点表**）后，执行侧首次回复：
 
-**已理解：总则长期有效；每次先读 ACTIVE 联动；检索用 codegraph，写码用 Ponytail；对照点先只读出表，禁系统替代设计稿。**
+**已理解：总则长期有效；每次先读 ACTIVE 联动；检索用 codegraph，写码用 Ponytail；对照点先只读出表，禁系统替代设计稿；并行时一切片一 worktree，合后再 DEVICE。**
 
 之后用户说 **「联动」** 或发任意消息时，先执行 **A.0** 再决定是否改代码。
 
@@ -124,5 +124,6 @@ FILES: （若有）路径 — 一行说明
 - 状态机：`IDLE` → `DISPATCHED`（执行中）→ `IN_REVIEW`（已交卷）→ `IDLE`（ACCEPTED 归档）或再 `DISPATCHED`（返工）；`BLOCKED` 须写清阻塞。
 - 同时只认**一张** ACTIVE 主单；整模块同步用多张顺号 TASK 切片排队，由主控按 S0–S7 门禁派发，禁止执行侧并行自开多单互殴。
 - 可选：大型需求可从外部工单目录桥接，但落到本仓时仍应写入 TASK 并经 ACTIVE 派发，执行侧不旁路。
+- **并行 / 多 worktree：** 见 `references/G-parallel-worktree.md`。ACTIVE `note` 须列齐子 TASK + worktree 路径；白名单文件交集必须为空；merge 后才 DEVICE。
 
 ---
