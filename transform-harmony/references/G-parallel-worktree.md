@@ -59,6 +59,39 @@ Worktree：../Dubbing-wt-<slice> ← TASK-xxx 白名单互斥。
 合并序：逻辑 → 资源 → UI → 交互；冲突停问主控。
 ```
 
+## G.2.1 角色是「帽子」不是固定人设
+
+**不要**写死「Agent A 永远截图、Agent B 永远写码」。每个 bot / Cursor 窗按**当次 TASK 认领的帽子**干活；下一轮可换帽。
+
+| 帽子 | 当次只做什么 | 共同约束 |
+|---|---|---|
+| **SHOT** | 跑 capture / interact / 补缺态；写出后走无损压缩；更新该模块 index | 产物**只**进 `~/Desktop/android-shots/<module>/`；已有非空 PNG 默认复用 |
+| **SURVEY** | 只读逻辑/资源/交互表 | 不改鸿蒙业务码；不挪截图目录 |
+| **CODE** | 白名单内改鸿蒙；Codegraph + Ponytail；字重跟 Android | 认自己的 worktree；不重截除非 FORCE 或 TASK 写明 |
+| **MERGE** | 合切片分支 | 一人 |
+| **DEVICE** | verify_harmony ≤1% | merge 后；占设备时与 SHOT 错开 |
+
+派单写法（贴进 ACTIVE `note` / 秘书提示词）：
+
+```text
+模块: <module>
+截图根: ~/Desktop/android-shots/<module>/   # 全员只认这一处，禁止拷进仓
+本轮认领:
+  - @窗1 帽子=SHOT  范围=缺态 P0-3；设备=<serial>
+  - @窗2 帽子=CODE  切片=ui-header  worktree=../Dubbing-wt-ui-header  TASK=…
+  - @窗3 帽子=CODE  切片=logic-api  worktree=../Dubbing-wt-logic  TASK=…
+下一轮可换帽；未点名的帽子本轮不做。
+```
+
+桌面截图统一管理：
+
+1. **唯一权威根**：`~/Desktop/android-shots/<module>/`（全 agent 读同一路径；禁每人私建副本目录）。
+2. SHOT 写、CODE/DEVICE **只读引用**文件名；CODE 不把 PNG add 进 git。
+3. 两 agent 都要动真机时：**串行约设备**（SHOT 时段 / DEVICE 时段），或分 `ANDROID_SERIAL`。
+4. 换人接着截：先看 index 与已有 PNG，缺啥补啥，禁止无故整目录重截。
+
+灵活示例：上午窗 A=SHOT、窗 B=CODE；下午窗 A 改戴 CODE（另一切片）、窗 B 戴 DEVICE——合法，只要当次 note 写清帽子与白名单。
+
 ## G.3 本机 multi-worktree 规程（鸿蒙仓）
 
 在**鸿蒙仓根**（本机，非 box）执行；路径示例可换：
