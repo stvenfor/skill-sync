@@ -1,9 +1,9 @@
 ---
-name: 跨端模块同步鸿蒙
+name: transform-harmony
 description: 在把整模块从 Android/iOS 同步到鸿蒙时使用：真机/模拟器自动截图落 Mac 桌面、对照源码转码、对照点表与执行总则；规则与脚本分层在 references/ scripts/ templates/。
 ---
 
-# 跨端模块同步鸿蒙
+# transform-harmony
 
 把**一整模块**同步到鸿蒙时按本 skill 执行。真值三轨写死；**规范按层存放，按需 Read，禁止一次灌入全文**。
 
