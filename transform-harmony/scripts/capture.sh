@@ -48,7 +48,7 @@ fi
   echo "- Activity: $FOCUS"
   echo "- 屏幕: $SIZE @ ${DPI}dpi（dp = px * 160 / dpi）"
   echo "- 抓取: $(date '+%Y-%m-%d %H:%M %Z')"
-  echo "- 落盘: $OUT（不做 git 管理）"
+  echo "- 落盘: ${OUT}（不做 git 管理）"
 } > "$OUT/$PAGE.meta.txt"
 
 # append index line
