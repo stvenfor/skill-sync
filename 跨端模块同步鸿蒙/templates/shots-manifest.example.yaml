@@ -1,0 +1,26 @@
+# 复制为工程 tools 或本机清单；产物仍落 ~/Desktop/android-shots/<module>/（不进 git）
+version: 1
+appId: com.example.app
+# 可选：钉死设备；也可用环境变量 ANDROID_SERIAL
+# deviceSerial: emulator-5554
+defaultDevice: phone_portrait
+login:
+  required: true
+  note: "fixture 账号见 TASK"
+
+modules:
+  - id: lightcourse
+    pages:
+      - id: home
+        open:
+          type: deep_link
+          uri: "app://lightcourse/home"
+        shots:
+          - state: default
+            waitFor: { testTag: "lc_home_root" }
+            file: A-home-default-01.png
+            note: "首页默认态"
+          - state: empty
+            setup: ["clear_cache_fixture"]
+            waitFor: { text: "暂无内容" }
+            file: A-home-empty-01.png
