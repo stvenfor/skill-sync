@@ -1,0 +1,41 @@
+# skill: harmony-to-kmp — SHOT_PLATFORM android|ios; OHOS verify via verify_ohos.sh
+# 产物落选定平台桌面根（不进 git）：
+#   platform: android → ~/Desktop/android-shots/<module>/
+#   platform: ios     → ~/Desktop/ios-shots/<module>/
+# reuse.preferExisting 默认 true：目标 file 已存在则跳过重截
+version: 1
+# platform: android | ios（与 SHOT_PLATFORM / 派单「真机端」一致；默认 android）
+platform: android
+appId: com.example.app
+reuse:
+  preferExisting: true
+# deviceSerial: emulator-5554   # Android
+# iosUdid: "00008030-…"         # iOS（或环境变量 IOS_UDID）
+defaultDevice: phone_portrait
+login:
+  required: true
+  note: "fixture 账号见 TASK"
+
+modules:
+  - id: lightcourse
+    pages:
+      - id: home
+        open:
+          type: deep_link
+          uri: "app://lightcourse/home"
+        shots:
+          - state: default
+            waitFor: { testTag: "lc_home_root" }
+            file: A-home-default-01.png
+            note: "首页默认态"
+          - state: after_scroll
+            actions:
+              - { type: swipe_pct, x1: 50, y1: 70, x2: 50, y2: 30, ms: 300 }
+              - { type: click, testTag: "item_0" }   # 优先语义定位；无则改用 tap_pct
+            waitFor: { testTag: "detail_root" }
+            file: A-home-after-scroll-01.png
+            note: "滑动后点首条"
+          - state: empty
+            setup: ["clear_cache_fixture"]
+            waitFor: { text: "暂无内容" }
+            file: A-home-empty-01.png
