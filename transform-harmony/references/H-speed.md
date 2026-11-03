@@ -24,6 +24,7 @@
 | 每改一行全量 ≤1% 对拍 | MERGE 后 **先烟测 1–2 个主路径态**；仅 Must-fix / 超差行跑 `verify_harmony`；禁止循环全量 |
 | 多轮澄清空转 | 未知一次 ≤3；能默认则写入 brief 推进；产品对错才停问 |
 | RESULT 长叙事 | 交卷用短字段 + 勾选；`CODEGRAPH` / `PONYTAIL` /（若有）`PUBLIC_IMPACT` |
+| 每张 PNG `oxipng -o max` | **默认 `-o 2`**（`OXIPNG_LEVEL`）；多文件一次 `compress_png.sh`；仅追体积才 `max`；`SKIP_COMPRESS=1` 可跳过 |
 
 ## H.2 FAST 流水线（默认）
 
@@ -60,6 +61,7 @@ T-MERGE → T-DEVICE 烟测（主路径 1–2 态）→ 超差只改表内行再
 4. 为对齐一个 icon 改 `common/` 公共组件（见 A.3.1）  
 5. CODE 未合完就全量 DEVICE  
 6. 烟测已过仍对无关页做全量像素扫  
+7. 流水线默认 `oxipng -o max` / 逐张开进程压目录（改用默认 `-o 2` + 批量一次调用）  
 
 ## H.4 full 模式加码（仅点名时）
 

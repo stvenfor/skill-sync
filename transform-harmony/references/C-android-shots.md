@@ -18,7 +18,7 @@
 | `scripts/interact.sh` | 点击 / 滑动 / 长按（adb input，Android） |
 | `scripts/compare_shots.py` | 选定真值端 vs 鸿蒙像素差（默认阈值 1%） |
 | `scripts/verify_harmony.sh` | 鸿蒙同态截图 + 对比；超阈值提示同步优化 |
-| `scripts/compress_png.sh` | PNG **无损**压缩（oxipng/optipng/pngcrush/Pillow） |
+| `scripts/compress_png.sh` | PNG **无损**压缩（**oxipng 默认 -o 2**；可 `OXIPNG_LEVEL`/`SKIP_COMPRESS`） |
 
 模板：`templates/shots-manifest.example.yaml`（含 `platform` 字段）。产物**不进 git**。已有 PNG **默认复用**。
 
@@ -179,10 +179,12 @@ iOS：清单同构；截屏走 `ios_capture.sh`（devicectl / idevicescreenshot 
 ### 3.13 截图后无损压缩（自动）
 
 - `capture.sh` / `ios_capture.sh` / `harmony_shot.sh` 写出 PNG 后**自动**调用 `scripts/compress_png.sh`。
-- **只做无损**：不改像素；优先 `oxipng` → `optipng` → `pngcrush` → Pillow `optimize+compress_level=9`。
-- 本机建议安装其一：`brew install oxipng` 或 `optipng`（体积更小、更快）。
+- **只做无损**：不改像素；**本机权威工具 = `oxipng`（已装）**；缺失时才回落 `optipng` → `pngcrush` → Pillow。
+- **默认快档**：`oxipng -o ${OXIPNG_LEVEL:-2} --strip safe`；多文件**一次调用**（勿逐张开进程）。`-o 2` 对截图体积足够，墙钟远低于 `-o max`（实测约 1s vs ~6s/张量级）。
+- 体积极致才：`export OXIPNG_LEVEL=max`。跳过压缩：`export SKIP_COMPRESS=1`。
 - 批量补压：`bash scripts/compress_png.sh ~/Desktop/<android|ios>-shots/<module>/*.png`
 - 压缩失败不阻断截图流程（`|| true`）；产物仍不进 git。
+- 若新环境无 oxipng：`brew install oxipng`（不要默认用 `-o max` 当流水线档）。
 
 ### 3.14 iOS 真机 / 模拟器截图轨
 
