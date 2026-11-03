@@ -47,7 +47,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 ## 存放位置（硬）
 
 - **唯一权威目录（本机）**：`~/.agents/skills/transform-harmony/`（脚本、规范、模板、文档全在此）
-- **Grok Bot 侧**：同一 skill（id `skill-1793292690508`），helpers 与上面对齐
+- **助手侧 skill 目录**：与本机权威目录 helpers 对齐（改完本机后同步该目录）
 - **禁止**把本 skill 的脚本/规范/模板/说明拷进业务仓（如 `Dubbing/docs/`）
 - 业务仓只保留产品/模块本身的 shots-manifest 业务条目（若需要）；Runner 引用 skill 内 `scripts/`
 - 截图产物只落选定平台桌面根：`~/Desktop/android-shots/<module>/` 或 `~/Desktop/ios-shots/<module>/`，不进 git、不进 skill 仓
@@ -57,7 +57,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 
 - **看见什么** → 选定平台自动截图（`SHOT_PLATFORM=android|ios` → `android-shots` 或 `ios-shots`）
 - **怎么算** → 逻辑源源码（状态机 / API / 回写）
-- **怎么写** → 只跟鸿蒙仓既有架构；**禁系统组件顶替设计稿**
+- **怎么写** → 只跟鸿蒙仓既有架构；**禁系统组件顶替设计稿**；**检索强制 codegraph、写码强制 Ponytail；默认禁改公共层**
 - **怎么并行** → 只读勘察可并行；改码一切片一 worktree（白名单互斥）；**合后再 DEVICE**；agent **按切片认领帽子**（SHOT/CODE/…可换），不固定谁永远截图
 
 
