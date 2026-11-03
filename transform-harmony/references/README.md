@@ -12,6 +12,7 @@
 | `G-parallel-worktree.md` | 并行勘察、多 worktree 改码、合并、派 agent |
 | `H-speed.md` | 墙钟提速（默认 SPEED=fast） |
 | `I-no-guess-no-default.md` | **禁瞎猜 / 禁默认实现**（硬拒 · 不可绕过） |
+| `J-exit-reroute.md` | **多轮不过：退出门与换路**（R3 停转） |
 
 脚本在 `../scripts/`，模板在 `../templates/`。执行时按 SKILL.md 编排顺序 Read 对应层，勿整份糊进上下文。
 

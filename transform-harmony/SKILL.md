@@ -37,6 +37,7 @@ references/              # 规范规则（按层 Read）
   G-parallel-worktree.md # 并行勘察 / 多 worktree 改码 / 合并 / 派 agent
   H-speed.md             # 墙钟提速（默认 SPEED=fast）
   I-no-guess-no-default.md # 禁瞎猜 / 禁默认实现（硬拒）
+  J-exit-reroute.md      # 多轮不过：退出门与换路
 scripts/                 # 可执行脚本（产物不进 git）
   capture.sh ios_capture.sh interact.sh ios_interact.sh measure.py run_shots.sh
   ios_index.sh harmony_shot.sh compare_shots.py verify_harmony.sh compress_png.sh
@@ -83,7 +84,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 2–3. **FAST 同开：** 截图轨 Read §C（P0、复用、深链优先）‖ 逻辑/资源/交互只读勘察（§D/§F）；需要时 `ios_index.sh`。
 4. 对照点：**先 P0 瘦表**定稿（§B）；有「系统替代/待定/缺失」→ **停问**。【串行】P1 可随后补。
 5. CODE 前：Read `references/I-no-guess-no-default.md` + `references/A-execution.md` + `references/E-harmony-norms.md` + **`G-parallel-worktree.md`**；ACTIVE 联动；**检索强制 codegraph、写码强制 Ponytail**；**默认禁改公共层（A.3.1）**；互斥切片 → 多 worktree；只改表内文件。
-6. **merge** 后 DEVICE：**先烟测主路径 1–2 态**，Must-fix/超差再 `verify_harmony` ≤1%；交卷短 RESULT + 同表回勾。
+6. **merge** 后 DEVICE：**先烟测主路径 1–2 态**，Must-fix/超差再 `verify_harmony` ≤1%；交卷短 RESULT + 同表回勾；同主题多轮未过按 **§J**（R2 triage，R3 EXIT/换路）。
 
 ## 硬门速记
 
@@ -105,6 +106,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 | 公共层 | **默认禁改** `common/` 与跨 feature 公共组件/代码；优先复用；白名单才可改，且 RESULT 必写 **PUBLIC_IMPACT**（功能+UI 影响） |
 | 提速 | 默认 **SPEED=fast**：P0 截图、SHOT‖SURVEY、瘦表先 CODE、DEVICE 先烟测；禁无故重截/灌全文/未合并全量对拍 |
 | 禁瞎猜/禁默认实现 | **硬保证（§I）**：无分支表源码证据 / 对照点未齐 → 不派 CODE；禁 stub、系统顶替、假数据交差；RESULT 必含 `NO_GUESS`/`NO_DEFAULT`/`EVIDENCE_*` 否则 REJECTED |
+| 退出/换路 | **§J**：同主题 R2 强制 triage；**R3 仍不过 → EXIT 卡停派**，换路 A–F（攻前提/缩范围/换实现族/升 full/产品裁定/拆切片）；禁同思路 R4 |
 
 ## Done
 
