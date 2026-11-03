@@ -14,7 +14,7 @@ description: >-
 - Android / iOS → 鸿蒙整模块对齐
 - 需要自动截图（**Android 或 iOS 真机/已装应用的模拟器**，由 `SHOT_PLATFORM` 选定）作视觉真值；截图按模块落 **Mac 桌面**、**不进 git**
 - 对照源码转码，严格鸿蒙规范；对照点表先只读再改码
-- 整模块要提速：并行勘察 + 多 worktree 改码再合并（见 §G）
+- 整模块要提速：默认 **SPEED=fast**（见 §H）；SHOT‖SURVEY；瘦表先 CODE；DEVICE 先烟测
 
 ## 何时不用
 
@@ -35,6 +35,7 @@ references/              # 规范规则（按层 Read）
   E-harmony-norms.md     # 鸿蒙落点 / ArkTS / Must-fix / DEVICE
   F-module-sync-tracks.md # 指定模块五轨（截图/逻辑/UI/资源/交互）
   G-parallel-worktree.md # 并行勘察 / 多 worktree 改码 / 合并 / 派 agent
+  H-speed.md             # 墙钟提速（默认 SPEED=fast）
 scripts/                 # 可执行脚本（产物不进 git）
   capture.sh ios_capture.sh interact.sh ios_interact.sh measure.py run_shots.sh
   ios_index.sh harmony_shot.sh compare_shots.py verify_harmony.sh compress_png.sh
@@ -58,12 +59,12 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 - **看见什么** → 选定平台自动截图（`SHOT_PLATFORM=android|ios` → `android-shots` 或 `ios-shots`）
 - **怎么算** → 逻辑源源码（状态机 / API / 回写）
 - **怎么写** → 只跟鸿蒙仓既有架构；**禁系统组件顶替设计稿**；**检索强制 codegraph、写码强制 Ponytail；默认禁改公共层**
-- **怎么并行** → 只读勘察可并行；改码一切片一 worktree（白名单互斥）；**合后再 DEVICE**；agent **按切片认领帽子**（SHOT/CODE/…可换），不固定谁永远截图
+- **怎么并行** → 默认 FAST：SHOT‖SURVEY；改码互斥才 multi-worktree；**合后先烟测再按需满量 DEVICE**；按切片认领帽子（SHOT/CODE/…可换）
 
 
 ## 指定模块怎么跑（五轨，必须全做）
 
-用户指定模块后，Read `references/F-module-sync-tracks.md`，按序：
+用户指定模块后，先 Read `references/H-speed.md`（默认 **SPEED=fast**），再 Read `references/F-module-sync-tracks.md`，按序：
 
 1. **截图** → §C（已有复用）
 2. **业务逻辑** → §D 分支表 → CODE 接通 API/状态/回写
@@ -71,18 +72,17 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 4. **资源** → `templates/resource-inventory.md` 入仓再引用
 5. **交互效果** → `templates/interaction-matrix.md` + §B.4 Lottie；`interact.sh` / actions 仅用于到达态
 
-提速时另 Read `references/G-parallel-worktree.md`：勘察 2/4/5 可并行；CODE 按互斥白名单多 worktree；merge 后才 DEVICE。
+提速：默认 Read `references/H-speed.md` + `G-parallel-worktree.md`：**SHOT‖SURVEY**；P0 瘦表先 CODE；切片≥2 才 multi-worktree；merge 后 DEVICE **先烟测**再按需满量 ≤1%。
 
 模板：`module-brief.md` / `resource-inventory.md` / `interaction-matrix.md`。五轨勾齐才算该模块转换完成。
 
 ## 编排顺序（必须按序）
 
-1. Read `references/00-overview.md` → 齐套与 S0–S7；缺资产停。
-2. 截图轨：Read `references/C-android-shots.md`；写死 `SHOT_PLATFORM` / `真机端`；**已有图优先复用**；缺图按平台选 `capture.sh`（android）或 `ios_capture.sh`（ios），或 `run_shots.sh`；Android 点击用 `interact.sh` / manifest `actions[]`，iOS 优先深链/人工导航。
-3. 逻辑/资源/交互勘察：Read §D + §F；**可并行只读**（见 §G）；需要时 `scripts/ios_index.sh <关键词>`。
-4. 对照点：Read `references/B-mapping-table.md`；只读源码填 `templates/mapping-table.md`；有「系统替代/待定/缺失」→ **停问**，勿写码。【串行定稿】
+1. Read `references/H-speed.md`（默认 FAST）+ `references/00-overview.md` → 齐套；缺资产停；**禁止灌读全文**。
+2–3. **FAST 同开：** 截图轨 Read §C（P0、复用、深链优先）‖ 逻辑/资源/交互只读勘察（§D/§F）；需要时 `ios_index.sh`。
+4. 对照点：**先 P0 瘦表**定稿（§B）；有「系统替代/待定/缺失」→ **停问**。【串行】P1 可随后补。
 5. CODE 前：Read `references/A-execution.md` + `references/E-harmony-norms.md` + **`G-parallel-worktree.md`**；ACTIVE 联动；**检索强制 codegraph、写码强制 Ponytail**；**默认禁改公共层（A.3.1）**；互斥切片 → 多 worktree；只改表内文件。
-6. **merge** 各切片分支到主工作分支（主控一人）；再 DEVICE：`scripts/verify_harmony.sh`（默认 ≤1%）；超差 → 同步优化再验；交卷 `templates/RESULT-handoff.md` + 同表回勾。
+6. **merge** 后 DEVICE：**先烟测主路径 1–2 态**，Must-fix/超差再 `verify_harmony` ≤1%；交卷短 RESULT + 同表回勾。
 
 ## 硬门速记
 
@@ -102,6 +102,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 | 检索 | **强制先 codegraph**；禁先全仓 grep/批量 Read；例外须写 RESULT |
 | 写码 | **强制 Ponytail**（最小 diff、复用现成封装）；>3 文件须说明 |
 | 公共层 | **默认禁改** `common/` 与跨 feature 公共组件/代码；优先复用；白名单才可改，且 RESULT 必写 **PUBLIC_IMPACT**（功能+UI 影响） |
+| 提速 | 默认 **SPEED=fast**：P0 截图、SHOT‖SURVEY、瘦表先 CODE、DEVICE 先烟测；禁无故重截/灌全文/未合并全量对拍 |
 
 ## Done
 

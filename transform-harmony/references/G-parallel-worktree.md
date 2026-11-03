@@ -10,7 +10,8 @@
 | 单切片、文件高度耦合、或对照表未确认 | **不**并行改码 |
 | 真机/模拟器稀缺 | 截图与 DEVICE **串行**占设备；勘察仍可并行 |
 
-主控在 `module-brief` / ACTIVE `note` 写：`parallel: yes | no` 与 `worktrees: N`（建议 2–3，软顶 4）。
+主控在 `module-brief` / ACTIVE `note` 写：`SPEED: fast|full`（默认 fast）、`parallel: yes | no` 与 `worktrees: N`（建议 2–3，软顶 4）。
+**FAST 默认：** 切片 ≥2 且白名单可拆 → `parallel=yes`；单切片或改动 &lt;5 文件 → `parallel=no`（避免 worktree 开销吃掉收益）。SHOT‖SURVEY 见 §H。
 
 ## G.1 可并行 vs 必须串行
 

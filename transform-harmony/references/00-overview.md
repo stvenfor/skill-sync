@@ -80,3 +80,9 @@ sync/<module>/
 ---
 
 指定整模块转换时，另读 **§F-module-sync-tracks**（五轨清单）；缺轨不得报完成。视觉真值平台可选（§C.3.0）。
+
+---
+
+## 3. 墙钟提速
+
+指定模块同步默认读 **§H-speed**（`SPEED=fast`）：禁止开局灌全文；SHOT 与 SURVEY 并行；P0 瘦表先 CODE；DEVICE 先烟测再按需满量。点名 `SPEED=full` 才走本节 S0–S7 全文档重量。
