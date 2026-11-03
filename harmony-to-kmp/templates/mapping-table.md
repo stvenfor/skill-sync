@@ -1,9 +1,9 @@
 # 对照点表 · <module>
 
-SHOT_PLATFORM: android|ios
+SHOT_PLATFORM: harmony
 DEVICE: wait|go
 
-| # | 源文件和控件 | KMP/CMP 落点 (source set + 路径) | 资源 | 时序 | 禁止项 | 对照结果 |
+| # | 鸿蒙原生组件/布局 | KMP/CMP 落点 (source set + 路径) | 资源 | 时序 | 禁止项 | 对照结果 |
 |---|---|---|---|---|---|---|
 | 1 |  | commonMain/… 或 ohosMain/… |  |  |  |  |
 

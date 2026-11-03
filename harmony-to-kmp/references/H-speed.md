@@ -69,5 +69,5 @@ verify_ohos ≤1% → 并表 + 短 RESULT
 ## H.5 派单时一行声明
 
 ```text
-SPEED=fast | module=<id> | SHOT_PLATFORM=android|ios | parallel=yes|no | P0-only shots | 瘦表先 CODE | DEVICE=wait|go | CPF_VERSION=<follow-notes|钉扎号>
+SPEED=fast | module=<id> | SHOT_PLATFORM=harmony | parallel=yes|no | P0-only shots | 瘦表先 CODE | DEVICE=wait|go | CPF_VERSION=<follow-notes|钉扎号>
 ```

@@ -1,15 +1,17 @@
-## D. 逻辑源端勘察（行为真值轨 → Kotlin）
+## D. 鸿蒙原生逻辑源勘察（行为真值轨 → Kotlin）
 
-产出 `logic/map.md` + `notes-state-machine.md`（名称可随源端改，内容不可少）：
+产出 `logic/map.md` + `notes-state-machine.md`（名称可随模块改，内容不可少）：
 
-1. 用户入口 → 路由/参数表
-2. 主 VC/Presenter/VM（或等价）与子工厂 → **目标 Kotlin VM / UseCase 草图**
+1. 用户入口 → 路由/参数表（读鸿蒙原生）
+2. 主 Page/ViewModel/Presenter（ArkTS/ets 等）与子工厂 → **目标 Kotlin VM / UseCase 草图**
 3. 网络：路径、字段、空/失败
 4. 完成回写与上下游回调
 5. 权限与错误路径
-6. **派 CODE 前硬门**：`入口 → 状态/分支 → 成功/失败/空态 → 对应截图号`，每行可回溯 **源文件:符号**
+6. **派 CODE 前硬门**：`入口 → 状态/分支 → 成功/失败/空态 → 对应截图号`，每行可回溯 **鸿蒙原生源文件:符号**
 7. 标明拟落 **commonMain vs ohosMain**（I/O、传感器、账号体系等才下沉平台）
 8. 勘察结果填入 **§B 对照点表**
+
+Android/iOS 同源逻辑仅作旁证，**不得单独充当行为真值**（除非用户书面裁定且鸿蒙侧无对应实现）。
 
 ### D.1 与 §I / source-set 联锁
 

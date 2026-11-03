@@ -2,7 +2,7 @@
 # adapted from transform-harmony shots/compare pipeline; target UI = KMP/CMP OHOS
 #!/usr/bin/env bash
 # 抓当前 Android 前台页：截图 + 控件树 + dp 测量表。
-# 【仅 Android】iOS 请用 ios_capture.sh；派单用 SHOT_PLATFORM=android|ios 选定真值端。
+# 【旁证·仅 Android】本 skill 默认真值是鸿蒙原生（harmony_shot.sh）。iOS 旁证用 ios_capture.sh。
 # 真机或模拟器均可（目标须已安装应用，且 adb 在线）。
 # 用法: capture.sh <页面名> [模块名]
 # 落盘: $ANDROID_SHOTS_ROOT/<module>/  默认 ~/Desktop/android-shots/<module>/

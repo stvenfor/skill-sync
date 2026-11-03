@@ -33,7 +33,7 @@
 - 一次问清符号与 blast radius → **只 Read 命中路径** → 仍不够再对 **≤3 路径** 窄 `rg`。
 - 例外须写入 RESULT：工具未索引 / 不可用。
 - 交卷强制 **CODEGRAPH**：`<查询摘要> → 命中 / 未索引 / 空`。
-- 对照端（Android/iOS/ArkTS）只读勘察可用窄 `rg`；**KMP 改码前影响面仍必须先 codegraph**。
+- 鸿蒙原生只读勘察可用窄 `rg`；Android/iOS 仅旁证；**KMP 改码前影响面仍必须先 codegraph**。
 
 ### A.3 Ponytail 写码（强制优先）
 

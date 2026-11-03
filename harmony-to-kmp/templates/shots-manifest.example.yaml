@@ -1,16 +1,14 @@
-# skill: harmony-to-kmp — SHOT_PLATFORM android|ios; OHOS verify via verify_ohos.sh
-# 产物落选定平台桌面根（不进 git）：
-#   platform: android → ~/Desktop/android-shots/<module>/
-#   platform: ios     → ~/Desktop/ios-shots/<module>/
+# skill: harmony-to-kmp — SHOT_PLATFORM=harmony（别名 ohos-native）
+# 真值落盘（不进 git）：
+#   ~/Desktop/harmony-shots/<module>/
+# DEVICE：verify_ohos 对比 KMP 前台 vs 上述真值；禁 Android/iOS 作对比源
 # reuse.preferExisting 默认 true：目标 file 已存在则跳过重截
 version: 1
-# platform: android | ios（与 SHOT_PLATFORM / 派单「真机端」一致；默认 android）
-platform: android
-appId: com.example.app
+platform: harmony
+appId: com.example.harmony.app
 reuse:
   preferExisting: true
-# deviceSerial: emulator-5554   # Android
-# iosUdid: "00008030-…"         # iOS（或环境变量 IOS_UDID）
+# hdc device 由环境/工具链决定
 defaultDevice: phone_portrait
 login:
   required: true
@@ -27,11 +25,11 @@ modules:
           - state: default
             waitFor: { testTag: "lc_home_root" }
             file: A-home-default-01.png
-            note: "首页默认态"
+            note: "鸿蒙原生首页默认态"
           - state: after_scroll
             actions:
               - { type: swipe_pct, x1: 50, y1: 70, x2: 50, y2: 30, ms: 300 }
-              - { type: click, testTag: "item_0" }   # 优先语义定位；无则改用 tap_pct
+              - { type: click, testTag: "item_0" }
             waitFor: { testTag: "detail_root" }
             file: A-home-after-scroll-01.png
             note: "滑动后点首条"
