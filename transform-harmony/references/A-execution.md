@@ -26,6 +26,12 @@
 | 遵守 `AGENTS.md`、`CLAUDE.md`、TASK 列出的 `.cursor/rules/*.mdc` | 越界改 `entry/`、其他 `feature/*`、登录/OAID/埋点/广告归因（除非 TASK 白名单写明） |
 | 需求不清时 RESULT 标 `BLOCKED` +「待确认」 | 猜产品意图、静默大重构 |
 
+### A.1.1 禁瞎猜 / 禁默认实现（强制 · 详见 §I）
+
+- 执行侧 **不得**在证据不足时写业务/UI；只能 `BLOCKED` + 停问。
+- 主控见 RESULT 缺 `NO_GUESS` / `NO_DEFAULT` / 相关 `EVIDENCE_*`，或 diff 含 §I 黑名单占位 → **REJECTED**。
+- 「先实现再问」一律视为违规，即使观感接近截图。
+
 **文件所有权：** `TASK` / `REVIEW` 由主控维护；`RESULT` 由执行维护。勿改 TASK 核心需求（可选把 TASK 状态标 `IN_PROGRESS`）。
 
 跨端同步流水线中的粗分：
@@ -127,7 +133,7 @@ FILES: （若有）路径 — 一行说明
 
 读完本 skill（尤其 **A. 执行总则** 与 **B. 对照点表**）后，执行侧首次回复：
 
-**已理解：总则长期有效；每次先读 ACTIVE 联动；检索强制先 codegraph（禁先全仓 grep），写码强制 Ponytail；默认禁改公共组件/公共代码、优先复用，必要改动须白名单 + PUBLIC_IMPACT；对照点先只读出表，禁系统替代设计稿；并行时一切片一 worktree，合后再 DEVICE。**
+**已理解：总则长期有效；每次先读 ACTIVE 联动；检索强制先 codegraph（禁先全仓 grep），写码强制 Ponytail；默认禁改公共组件/公共代码、优先复用，必要改动须白名单 + PUBLIC_IMPACT；对照点先只读出表，禁系统替代设计稿；**禁瞎猜/禁默认实现（§I）**；并行时一切片一 worktree，合后再 DEVICE。**
 
 之后用户说 **「联动」** 或发任意消息时，先执行 **A.0** 再决定是否改代码。
 

@@ -22,9 +22,10 @@
 | 对照表求全才开码 | 先出 **P0 瘦表** 即可派首批 CODE；P1/动效行可并行补，**DEVICE 前并表** |
 | 单文件也开多 worktree | **&lt;5 文件或单切片 → 禁止 multi-worktree**；≥2 互斥切片才 `parallel=yes` |
 | 每改一行全量 ≤1% 对拍 | MERGE 后 **先烟测 1–2 个主路径态**；仅 Must-fix / 超差行跑 `verify_harmony`；禁止循环全量 |
-| 多轮澄清空转 | 未知一次 ≤3；能默认则写入 brief 推进；产品对错才停问 |
+| 多轮澄清空转 | 未知一次 ≤3；**产品/逻辑禁默认推进**（见 §I）；仅真值已齐时工程落点可二选一推荐 |
 | RESULT 长叙事 | 交卷用短字段 + 勾选；`CODEGRAPH` / `PONYTAIL` /（若有）`PUBLIC_IMPACT` |
 | 每张 PNG `oxipng -o max` | **默认 `-o 2`**（`OXIPNG_LEVEL`）；多文件一次 `compress_png.sh`；仅追体积才 `max`；`SKIP_COMPRESS=1` 可跳过 |
+| 为赶 FAST 瞎猜/ stub 交差 | **禁止**；§I 证据门槛优先于墙钟；缺证据 → BLOCKED |
 
 ## H.2 FAST 流水线（默认）
 
@@ -62,6 +63,7 @@ T-MERGE → T-DEVICE 烟测（主路径 1–2 态）→ 超差只改表内行再
 5. CODE 未合完就全量 DEVICE  
 6. 烟测已过仍对无关页做全量像素扫  
 7. 流水线默认 `oxipng -o max` / 逐张开进程压目录（改用默认 `-o 2` + 批量一次调用）  
+8. 为赶 FAST 瞎猜分支或用 stub/系统控件/假数据交差（见 §I）  
 
 ## H.4 full 模式加码（仅点名时）
 

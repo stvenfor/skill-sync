@@ -10,6 +10,8 @@
 | `E-harmony-norms.md` | 鸿蒙落点、ArkTS、字重硬门、Must-fix、DEVICE、质量清单 |
 | `F-module-sync-tracks.md` | **指定模块**五轨：截图/逻辑/UI/资源/交互 |
 | `G-parallel-worktree.md` | 并行勘察、多 worktree 改码、合并、派 agent |
+| `H-speed.md` | 墙钟提速（默认 SPEED=fast） |
+| `I-no-guess-no-default.md` | **禁瞎猜 / 禁默认实现**（硬拒 · 不可绕过） |
 
 脚本在 `../scripts/`，模板在 `../templates/`。执行时按 SKILL.md 编排顺序 Read 对应层，勿整份糊进上下文。
 

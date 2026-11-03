@@ -1,6 +1,7 @@
 # F. 指定模块转换总轨（截图 → 逻辑 / UI / 资源 / 交互）
 
 > 用户点名「把某某模块转到鸿蒙」时，**本层是执行清单**。五轨都要做完才算模块转换完成；禁止只截图或只改 UI。
+> **硬保证：** 禁瞎猜、禁默认实现——见 `I-no-guess-no-default.md`；缺证据不得 CODE。
 >
 > 视觉真值平台可选：`SHOT_PLATFORM=android|ios`（见 §C.3.0）；默认 android。
 
@@ -25,7 +26,7 @@
 | 轨 | 真值 | 必做 | 完成标准 |
 |---|---|---|---|
 | **1 截图** | 选定平台可见态（android|ios） | Read §C；已有图复用；缺则 capture 或 ios_capture / actions 到达态 | P0 `page×state` 齐；index 可检索；产物在**选定**桌面根 |
-| **2 业务逻辑** | 逻辑源源码 | Read §D；分支表：入口→状态→成功/失败/空/回写 | 鸿蒙 API/VM/回写对齐分支表；可复现用例过 |
+| **2 业务逻辑** | 逻辑源源码 | Read §D + **§I**；分支表每行可回溯源文件:符号；禁猜接口 | 对齐分支表；失败/空/权限态齐；RESULT 含 `NO_GUESS`/`EVIDENCE_LOGIC` |
 | **3 UI 效果** | 选定平台截图 + 对照点表 | Read §B/§E；按区块改表内文件 | DEVICE `verify_harmony` **≤1%**；同表回勾一致 |
 | **4 资源** | 源端/设计导出文件 | 填 `templates/resource-inventory.md`；先入鸿蒙仓再引用 | 表内资源无「缺失，停止」未裁定；禁系统图标顶替 |
 | **5 交互效果** | 源端手势/动效/反馈 | 填 `templates/interaction-matrix.md`；Lottie 遵 §B.4 | 点击/滑动/反馈/动效时机与源一致；禁 setTimeout 当结束 |
