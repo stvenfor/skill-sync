@@ -28,7 +28,7 @@ description: >-
 SKILL.md                 # 本文件：编排与硬门摘要
 references/              # 规范规则（按层 Read）
   00-overview.md         # 齐套 / 真值 / 阶段门禁
-  A-execution.md         # 角色 / Codegraph / Ponytail / Git / TASK / 交卷 / 队列
+  A-execution.md         # 角色 / Codegraph强制 / Ponytail强制 / 公共层硬门 / Git / TASK / 交卷 / 队列
   B-mapping-table.md     # 对照点表五列 + Lottie
   C-android-shots.md     # 截图轨（android|ios）+ 桌面落盘
   D-logic-source.md      # 逻辑源勘察
@@ -81,7 +81,7 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 2. 截图轨：Read `references/C-android-shots.md`；写死 `SHOT_PLATFORM` / `真机端`；**已有图优先复用**；缺图按平台选 `capture.sh`（android）或 `ios_capture.sh`（ios），或 `run_shots.sh`；Android 点击用 `interact.sh` / manifest `actions[]`，iOS 优先深链/人工导航。
 3. 逻辑/资源/交互勘察：Read §D + §F；**可并行只读**（见 §G）；需要时 `scripts/ios_index.sh <关键词>`。
 4. 对照点：Read `references/B-mapping-table.md`；只读源码填 `templates/mapping-table.md`；有「系统替代/待定/缺失」→ **停问**，勿写码。【串行定稿】
-5. CODE 前：Read `references/A-execution.md` + `references/E-harmony-norms.md` + **`G-parallel-worktree.md`**；ACTIVE 联动；Codegraph + Ponytail；互斥切片 → 多 worktree；只改表内文件。
+5. CODE 前：Read `references/A-execution.md` + `references/E-harmony-norms.md` + **`G-parallel-worktree.md`**；ACTIVE 联动；**检索强制 codegraph、写码强制 Ponytail**；**默认禁改公共层（A.3.1）**；互斥切片 → 多 worktree；只改表内文件。
 6. **merge** 各切片分支到主工作分支（主控一人）；再 DEVICE：`scripts/verify_harmony.sh`（默认 ≤1%）；超差 → 同步优化再验；交卷 `templates/RESULT-handoff.md` + 同表回勾。
 
 ## 硬门速记
@@ -99,9 +99,12 @@ templates/               # manifest / 对照表 / 模块 brief / 资源 / 交互
 | Lottie | 创建时机 / json / 播完切换 / 循环；禁 Canvas scale；禁 setTimeout 当结束 |
 | Git | 默认禁 commit/push；截图产物禁 add；worktree 分支按 TASK 允许再 commit |
 | 跳步 | 无对照表 / 无分支表 → 不派 CODE |
+| 检索 | **强制先 codegraph**；禁先全仓 grep/批量 Read；例外须写 RESULT |
+| 写码 | **强制 Ponytail**（最小 diff、复用现成封装）；>3 文件须说明 |
+| 公共层 | **默认禁改** `common/` 与跨 feature 公共组件/代码；优先复用；白名单才可改，且 RESULT 必写 **PUBLIC_IMPACT**（功能+UI 影响） |
 
 ## Done
 
-- 指定模块五轨齐：截图 P0、逻辑分支接通、UI≤1%、资源入仓、交互矩阵验收；对照表回勾；交卷含 CODEGRAPH；若并行则 MERGE 报告齐。
+- 指定模块五轨齐：截图 P0、逻辑分支接通、UI≤1%、资源入仓、交互矩阵验收；对照表回勾；交卷含 **CODEGRAPH** + **PONYTAIL**；若改公共层须含 **PUBLIC_IMPACT**；若并行则 MERGE 报告齐。
 
 详细条文只在 `references/`；本文件不重复展开。

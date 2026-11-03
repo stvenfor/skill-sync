@@ -37,7 +37,7 @@ F.0 模块 brief
   → 轨1 截图（或复用）
   → 轨2 逻辑勘察 + 轨4 资源盘点 + 轨5 交互矩阵（只读，可并行）
   → 对照点表 §B（五列吃进 UI/资源/时序）【串行定稿】
-  → CODE：互斥白名单 → 多 git worktree 并行；依赖序 逻辑→资源→UI→交互
+  → CODE：互斥白名单 → 多 git worktree 并行；**强制 codegraph + Ponytail**；**默认禁改公共层**；依赖序 逻辑→资源→UI→交互
   → merge 各切片分支到主工作分支
   → DEVICE：verify_harmony ≤1% + 逻辑用例 + 交互用例【仅合并后 · 单人】
 ```

@@ -35,7 +35,7 @@
 10. **占位**：禁自画灰色块冒充正式 UI；禁「临时 Image 网图」当终态
 11. **动效 / Lottie**：按 **§B.4** 写死创建时机、json、播完切换、循环；**禁对 Canvas 做 scale**；**禁用 setTimeout / 盲 sleep 当播放结束**；DEVICE 先验时机再验观感
 12. **字体 / 字重（硬）**：以 **Android 截图 + 源端 Text 样式** 为真值。Android 为 Regular/正常字重时，鸿蒙 **禁止** 自行 `FontWeight.Bold` / `Medium` / `Bold` 数字档或「标题就加粗」。仅当源端明确 bold/medium、或截图可辨加粗时才写对应字重；默认跟 Regular（或仓内等价 `FontWeight.Normal` / 不设）。禁止用「鸿蒙默认标题样式」无对照地加粗。对照点或区块备注须能回指字重依据（截图号或源 `textStyle`/`textStyleRes`）。
-13. **命名**：文件/组件/方法跟鸿蒙仓约定，不跟 Android/iOS 文件名；公共组件提取前先 STAGE_A 同意
+13. **命名**：文件/组件/方法跟鸿蒙仓约定，不跟 Android/iOS 文件名；**优先复用已有公共组件/公共代码，默认禁止改公共层**（见 A.3.1）；确需提取或改公共实现前先 STAGE_A / 白名单同意，并写 PUBLIC_IMPACT
 14. **边界**：本单禁混无关产品线；共壳修改必须声明回归范围；**只改对照表写明的文件**
 15. **工程卫生**：不擅自 commit/push；不引入与门禁冲突的依赖；调试入口仅 debug/dev 源集
 
@@ -92,7 +92,7 @@
 - [ ] Lottie/动效时机表（若有）
 - [ ] Must-fix 含真值+禁区+证据
 - [ ] WBS/PROMPT/TASK 可按切片独立派；ACTIVE 队列清晰；白名单 ⊆ 对照表
-- [ ] CODE 遵 A.1–A.4（角色/Codegraph/Ponytail/Git）
+- [ ] CODE 遵 A.1–A.4（角色/强制 Codegraph/强制 Ponytail/公共层 A.3.1/Git）
 - [ ] DEVICE 引用具体截图文件名；同表回勾
 - [ ] 已有 Android 截图优先复用；无故不重截
 - [ ] 鸿蒙真机 verify；P0 差异 ≤1%，超则同步优化闭环
@@ -129,7 +129,9 @@
 | 长列表/复杂交互不稳 | 分段屏+深链中间态；stitch 不进门禁 |
 | 单过大 | 按第 2 节切片；禁止只转发笼统指令 |
 | 系统弹框/图标顶替 | Must-fix / §B 破禁停手 |
-| 跳过 codegraph / 大 diff | RESULT 不合格；主控 REJECTED |
+| 跳过 codegraph / 先全仓 grep | RESULT 不合格；主控 REJECTED |
+| 未按 Ponytail / 无故大 diff | RESULT 不合格；主控 REJECTED |
+| 未白名单改公共层 / 无 PUBLIC_IMPACT | 主控直接 REJECTED |
 | 未授权 git / 敏感目录 | 破禁停手；从暂存区撤出 |
 | 对照点表含糊或系统替代 | 停问用户；禁止实现 |
 | Lottie 用 setTimeout/Canvas scale | 破禁；改完成回调与仓内播法 |
