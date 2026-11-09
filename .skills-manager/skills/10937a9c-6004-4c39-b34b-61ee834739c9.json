@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "10937a9c-6004-4c39-b34b-61ee834739c9",
+  "path": "karpathy-guidelines",
+  "path_key": "karpathy-guidelines",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "szkocot/andrej-karpathy-skills/karpathy-guidelines",
+    "subpath": "skills/karpathy-guidelines",
+    "branch": null
+  }
+}
