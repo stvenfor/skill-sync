@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "ee506e6e-6c80-4011-a079-02b95353613c",
+  "path": "transform-harmony",
+  "path_key": "transform-harmony",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
