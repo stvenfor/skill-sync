@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "0e6c04de-e69d-4578-9f82-fdec3cf4e377",
+  "path": "codex-with-chatgpt",
+  "path_key": "codex-with-chatgpt",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
